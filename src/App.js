@@ -1,19 +1,16 @@
-import React, { Component } from 'react';
-import './reset.less';
-import requests from './utils/requests'
+import React, { Component } from 'react'
+import 'bootstrap/dist/css/bootstrap.css'
+import './reset.less'
 
-@requests()
+import { Home } from './screen/index'
+
 class App extends Component {
   render() {
     return (
       <div className="App">
-        dasdasd
+        <Home></Home>
       </div>
     );
-  }
-
-  componentDidMount () {
-    console.log(this.props)
   }
 }
 
