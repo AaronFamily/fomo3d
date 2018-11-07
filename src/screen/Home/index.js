@@ -1,67 +1,56 @@
 import React, { Component } from 'react'
 import requests from '../../utils/requests'
-import { 
-  Collapse,Navbar,NavbarToggler,NavbarBrand,Nav,NavItem,
-  NavLink,UncontrolledDropdown,DropdownToggle,DropdownMenu,DropdownItem,
-  Container,Row,Col
-  } from 'reactstrap';
-import Tabs from './Tabs'
+import {
+	NavItem,
+	NavLink,
+	Container,
+	Row,
+	Col
+} from 'reactstrap'
 
-import Countdown from '../../components/Countdown/index';
+import { Countdown, Header } from '../../components/index'
 
 import './index.less'
-import { format } from 'path';
 
 @requests()
 class Home extends Component {
     constructor(props) {
         super(props);
     
-        this.toggle = this.toggle.bind(this);
         this.state = {
-            isOpen: false
-        };
-    }
-    toggle() {
-    this.setState({
-        isOpen: !this.state.isOpen
-    });
+            
+        }
     }
 
     render() {
         return (
-            <div>
-              <Navbar color="light" light expand="md">
-                <NavbarBrand href="/">reactstrap</NavbarBrand>
-                <NavbarToggler onClick={this.toggle} />
-                <Collapse isOpen={this.state.isOpen} navbar>
-                  <Nav className="ml-auto" navbar>
-                    <NavItem>
-                      <NavLink href="/components/">Components</NavLink>
+            <div className="home">
+              <Header title='Fomo3D'>
+                  	<NavItem>
+                      	<NavLink href="" className="text-white">
+						  	<span className="iconfont icon-zbds_shalou"></span>
+						  	<span>47:32:42</span>
+						</NavLink>
                     </NavItem>
-                    <NavItem>
-                      <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
+					<NavItem>
+                      	<NavLink href="" className="text-white">
+						  	<span className="iconfont icon-zbds_shalou"></span>
+						  	<span>0</span>
+						</NavLink>
                     </NavItem>
-                    <UncontrolledDropdown nav inNavbar>
-                      <DropdownToggle nav caret>
-                        Options
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <DropdownItem>
-                          Option 1
-                        </DropdownItem>
-                        <DropdownItem>
-                          Option 2
-                        </DropdownItem>
-                        <DropdownItem divider />
-                        <DropdownItem>
-                          Reset
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </UncontrolledDropdown>
-                  </Nav>
-                </Collapse>
-              </Navbar>
+					<NavItem>
+                      	<NavLink href="" className="text-white">
+						  	<span className="iconfont icon-zhexiantu"></span>
+							<span>3.1%（0.39EHT）</span>
+						</NavLink>
+                    </NavItem>
+					<NavItem>
+                      	<NavLink href="" className="text-white">
+						  	<span className="iconfont icon-zhexiantu"></span>
+						  	<span>注册名称</span>
+						</NavLink>
+                    </NavItem>
+              </Header>
               {/* <Tabs></Tabs> */}
               <Container>
                 <Row>
