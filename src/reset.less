@@ -3,16 +3,17 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fiel
 	padding: 0;
 }
 
+html, body, .App, .g-container{
+	min-height: 100vh;
+}
+
 body {
 	background: #fff;
 	color: #555;
 	font-size: 14px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	background: rgb(21,23,48);
-
 	background: url(/img/FR_sm.jpeg) no-repeat;
-    background-size:100% 100%;
-
+	background-size:100% 100%;
 }
 
 td, th, caption {
@@ -68,4 +69,23 @@ html {
 
 .clearfix {
 	*zoom: 1;
+}
+
+button:focus{
+	outline: none;
+}
+
+.g-header-icon{
+	height: 16px;
+	margin: -6px 6px 0 0;
+}
+
+.g-container{
+	padding-bottom: 40px;
+	box-sizing: border-box;
+}
+
+.g-footer{
+	height: 40px;
+	margin-top: -40px;
 }

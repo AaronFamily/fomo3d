@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
-import requests from '../../utils/requests';
-import { NavItem, NavLink, Container, Row, Col } from 'reactstrap';
+import React, { Component } from 'react'
+import { Row, Col } from 'reactstrap'
 
-import { Countdown, Header, Accordion } from '../../components/index';
+import { Countdown, Accordion } from '../../components/index'
+import { title } from '../../image/index'
 
-import './index.less';
+import requests from '../../utils/requests'
+
+import './index.less'
 
 @requests()
 class Home extends Component {
@@ -17,53 +19,27 @@ class Home extends Component {
 	render() {
 		return (
 			<div className="home">
-				<Header title="Fomo3D">
-					<NavItem>
-						<NavLink href="" className="text-white">
-							{/* <span className="iconfont icon-zbds_shalou" /> */}
-              <img className="icon_img" src="/img/daojishi_sm.png" alt=""/>
-							<span>47:32:42</span>
-						</NavLink>
-					</NavItem>
-					<NavItem>
-						<NavLink href="" className="text-white">
-							{/* <span className="iconfont icon-zbds_shalou" /> */}
-              <img className="icon_img" src="/img/yuechi_sm.png" alt=""/>
-							<span>0</span>
-						</NavLink>
-					</NavItem>
-					<NavItem>
-						<NavLink href="" className="text-white">
-							{/* <span className="iconfont icon-zhexiantu" /> */}
-              <img className="icon_img" src="/img/huoyuedu_sm.png" alt=""/>
-							<span>3.1%（0.39EHT）</span>
-						</NavLink>
-					</NavItem>
-					<NavItem>
-						<NavLink href="" className="text-white">
-							{/* <span className="iconfont icon-zhexiantu" /> */}
-              <img className="icon_img" src="/img/guanlian_sm.png" alt=""/>
-							<span>注册名称</span>
-						</NavLink>
-					</NavItem>
-				</Header>
-				{/* <Tabs></Tabs> */}
-				<Container>
+				<div className="main">
 					{/* 标题 */}
-					<Row><Col><div className="Home_Title"><img src="/img/title_sm.png" alt=""/></div></Col></Row>
+					<div className="title">
+						<img className="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-6" src={ title } alt="换了夺宝记"/>
+					</div>
           {/* 倒计时 */}
-          <Row><Col><Countdown /></Col></Row>
+					<Countdown
+						endTime={ 1541692470968+10*60*1000 }
+					/>
+					<div className="trophy"></div>
           {/* 购买欢乐币 */}
-          <Row><Col><div className="Home_buy">购买欢乐币</div></Col></Row>
+          <div className="buy">购买欢乐币</div>
           {/* tab切换 */}
           <Row>
-            <Col sm="6"><Accordion /></Col>
-            <Col sm="6"><Accordion /></Col>
+            <Col xs="12" sm="12" md="6" lg="6" xl="6"><Accordion /></Col>
+            <Col xs="12" sm="12" md="6" lg="6" xl="6"><Accordion /></Col>
           </Row>
-				</Container>
+				</div>
 			</div>
 		);
 	}
 }
 
-export default Home;
+export default Home

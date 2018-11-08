@@ -1,5 +1,4 @@
 import React , {Component} from 'react'
-import requests from '../../utils/requests'
 
 import './index.less'
 
@@ -7,61 +6,67 @@ class Countdown extends Component {
     constructor (props) {
         super (props)
         this.state = {
-            endDateStr : '2019-11-25 8:00:45',
-            days : '',
-            hours : '',
-            minutes : '',
-            seconds : '',
-
+            endTime : props.endTime,
+            hours : 0,
+            minutes : 0,
+            seconds : 0
         }
+
+        this.timeOut = null
+    }
+
+    render (){
+        const { hours, minutes, seconds } = this.state
+
+        return (
+            <div className="Countdown">
+                <div className="Countdown_box">
+                    <span>{ hours <10 && '0' }{ hours }</span><strong> : </strong>
+                    <span>{ minutes <10 && '0' }{ minutes }</span><strong> : </strong>
+                    <span>{ seconds <10 && '0' }{ seconds }</span>
+                </div>
+            </div>
+        )
     }
 
     componentDidMount (){
-        this.TimeDown()
+        this.timeDown()
     }
 
-    TimeDown () {
-        const that = this
-        var endDate = new Date(this.state.endDateStr);  //结束时间
-        var nowDate = new Date();   //当前时间
-        var totalSeconds = parseInt((endDate - nowDate) / 1000);    //相差的总秒数
-        var days = Math.floor(totalSeconds / (60 * 60 * 24));   //天数
-        var modulo = totalSeconds % (60 * 60 * 24); //取模（余数）
-        var hours = Math.floor(modulo / (60 * 60)); //小时数
-        modulo = modulo % (60 * 60);
-        var minutes = Math.floor(modulo / 60);  //分钟
-        var seconds = modulo % 60;  //秒
-        //输出到页面
+    componentWillUnmount () {
+        clearTimeout(this.timeOut)
+    }
+
+    timeDown () {
+        if ((new Date()).getTime() >= this.state.endTime ) return
+
+        let endDate = new Date(this.state.endTime)
+        let nowDate = new Date()
+        let totalSeconds = parseInt((endDate - nowDate) / 1000)
+        let modulo = totalSeconds % (60 * 60 * 24)
+        let hours = Math.floor(modulo / (60 * 60))
+
+        modulo = modulo % (60 * 60)
+        
+        let minutes = Math.floor(modulo / 60)
+        let seconds = modulo % 60
+        
         this.setState({
-            days : days,
             hours : hours,
             minutes : minutes,
             seconds : seconds
         })
-        //延迟一秒执行自己
-        const timeOut = setTimeout(function () {
+        
+        this.timeOut = setTimeout( () => {
             const nowTime = (new Date()).getTime()
-            const simulationEndTime = that.state.simulationEndTime
-            if(nowTime >= simulationEndTime){
-                clearTimeout(timeOut);
-                console.log('------倒计时结束------')
+
+            if(nowTime >= this.state.endTime){
+                clearTimeout(this.timeOut)
+
             }else{
-                that.TimeDown();
+                this.timeDown()
             }
         }, 1000)
-    }
-    render (){
-        const { days,hours,minutes,seconds } = this.state
-        return (
-            <div className="Countdown">
-                <div className="Countdown_box">
-                    <span className="Countdown_days">{days}</span><strong> 天 </strong>
-                    <span>{hours}</span><strong> : </strong>
-                    <span>{minutes}</span><strong> : </strong>
-                    <span>{seconds}</span>
-                </div>
-            </div>
-        )
     }
 }
 
