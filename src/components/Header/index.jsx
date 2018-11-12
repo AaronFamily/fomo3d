@@ -31,11 +31,11 @@ export default class extends Component {
     }
 
     render() {
-        return <Navbar className="navbar navbar-fixed-top navbar-transparent navbar-dark header-navbar" expand="md">
-            <NavbarBrand className="text-white" href="/">{ this.props.title }</NavbarBrand>
+        return <Navbar className="navbar navbar-fixed navbar-transparent navbar-dark header-navbar" expand="md">
+            <NavbarBrand className="text-white pr-3" href="/">{ this.props.title }</NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="col-lg-12 col-md-12 justify-content-between text-white " navbar>
+            <Nav className="col-lg-12 col-md-12 text-white " navbar>
                 { this.props.children }
             </Nav>
             </Collapse>

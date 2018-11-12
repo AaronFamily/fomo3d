@@ -29,27 +29,32 @@ export default class extends Component {
         return (
             <div className="head">
                 <Header title="Fomo3D">
-                    <NavItem>
+                    <NavItem className="col-md-3 col-lg-3 head-vertical-center head-icon-left">
                         <div className="head-liItem">
-                            <img className="g-header-icon" src={ funnel } alt="funnel"/>
-                            <Countdown endTime={ 1541692470968+10000000*60*1000 } fontSize='16px' />
+                            <img className="g-header-icon head-hourglass" src={ funnel } alt="funnel"/>
+                            <Countdown endTime={ 1541692470968+10000000*60*1000 } special={ false } fontSize='14px' />
                         </div>
                     </NavItem>
-                    <NavItem>
-                        <div className="middle">
-                            <img className="g-header-icon" src={ goldCoinsDeep } alt="key"/>
+                    <NavItem className="col-md-3 col-lg-3 head-vertical-center head-icon-left">
+                        <div className="middle head-vertical-center">
+                            <img className="g-header-icon" src={ goldCoinsDeep } alt="goldCoinsDeep"/>
                             <span>0</span>
                         </div>
                     </NavItem>
-                    <NavItem className="head-user">
-                        <img className="g-header-icon" src={ user } alt="user"/>
-                        <div className="head-user-text login-register">
-                            <div onClick={()=>this.showModel('Login')} className={loginOrRegister=='Login' ? 'gradient-bg' : ''}>登录</div>
-                            <div onClick={()=>this.showModel('ModalRegister')} className={loginOrRegister=='ModalRegister' ? 'gradient-bg' : ''}>注册</div>
+                    <NavItem className="col-md-2 col-lg-2"></NavItem>
+                    <NavItem className="col-md-3 col-lg-3 head-vertical-center">
+                        <div className="head-flex-row pull-right">
+                            <img className="g-header-icon head-user-icon" src={ user } alt="user"/>
+                            <div className="head-user-text login-register">
+                                <div onClick={()=>this.showModel('Login')} className={ loginOrRegister === 'Login' ? 'header-active-login' : ''}>登录</div>
+                                <div onClick={()=>this.showModel('ModalRegister')} className={ loginOrRegister === 'ModalRegister' ? 'header-active-login' : ''}>注册</div>
+                            </div>
                         </div>
                     </NavItem>
+                    <NavItem className="col-md-1 col-lg-1 pull-right head-vertical-center">
+                        EN V
+                    </NavItem>
                 </Header>
-                <Modals>弹框</Modals>
                 {
                   loginOrRegister == 'Login' ? 
                   <Login modal={ ModalsIsShow }></Login> :

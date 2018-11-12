@@ -25,7 +25,7 @@ class Register extends Component {
     render (){
         return (
             <div className="register">
-                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                <Modal isOpen={this.state.modal} toggle={this.toggle} className={`${this.props.className} register`}>
                     <ModalHeader toggle={this.toggle}>注册</ModalHeader>
                     <ModalBody>
                         <InputGroup>

@@ -10,9 +10,9 @@ import { Home } from './screen/index'
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <div className="app">
+        <Head></Head>
         <div className="g-container">
-          <Head></Head>
           <Home></Home>
         </div>
         <div className="g-footer">footer</div>

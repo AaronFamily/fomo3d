@@ -30,7 +30,7 @@ class Login extends Component {
         const { nickname, pwd } = this.state
         return (
             <div className="login">
-                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                <Modal isOpen={this.state.modal} toggle={this.toggle} className={`${this.props.className} login-modal`}>
                     <ModalHeader toggle={this.toggle}>登录</ModalHeader>
                     <ModalBody>
                         <InputGroup>

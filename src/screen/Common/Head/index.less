@@ -1,21 +1,52 @@
+.head-vertical-center{
+    display: flex;
+    align-items: center;
+    padding: 0;
+    min-height: 34px;
+}
+
+.head-hourglass{
+    margin-right: -10px;
+}
+
 .head-liItem {
     display: flex;
     flex: 1;
 }
 
+.head-flex-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: 34px;
+}
+
+.head-icon-left{
+    margin-left: -6px;
+}
+
+.head-user-icon{
+    width: 24px;
+    height: 24px;
+}
+
 .head-user-text{
+    width: 98px;
+    height: 26px;
     overflow: hidden;
     border: 1px solid #fff;
     border-radius: 4px;
     display: flex;
     flex-direction: row;
-    float: right;
     margin-left: 10px;
 
     div{
+        width: 49px;
         border-radius: 0;
-        padding: 4px 10px;
         cursor: pointer;
+        text-align: center;
+        font-size: 14px;
+        line-height: 26px;
     }
 }
 
@@ -36,4 +67,12 @@
 
 .head-self-right{
     justify-content: flex-end;
+}
+
+.header-active-login{
+    color: #fff;
+    background: linear-gradient(to right, #4F9DFF 0%, #F56FF0 100%);
+    text-align: center;
+    border-radius: 6px;
+    font-size: 14px;
 }

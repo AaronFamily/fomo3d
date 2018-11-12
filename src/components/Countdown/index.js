@@ -3,6 +3,11 @@ import React , { Component } from 'react'
 import './index.less'
 
 class Countdown extends Component {
+    static defaultProps = {
+        fontSize: '14px',
+        special: true
+    }
+    
     constructor (props) {
         super (props)
         this.state = {
@@ -11,17 +16,18 @@ class Countdown extends Component {
             minutes : 0,
             seconds : 0,
             fontSize : props.fontSize,
+            special: props.special
         }
 
         this.timeOut = null
     }
 
     render (){
-        const { hours, minutes, seconds, fontSize } = this.state
+        const { hours, minutes, seconds, fontSize, special } = this.state
 
         return (
-            <div className="Countdown" style={{ fontSize: fontSize }}>
-                <div className="gradient-color Countdown_box">
+            <div className="countdown" style={{ fontSize: fontSize }}>
+                <div className={ `countdown_box ${special ? 'gradient-color' : 'no-strong'}` }>
                     <span>{ hours <10 && '0' }{ hours }</span><strong> : </strong>
                     <span>{ minutes <10 && '0' }{ minutes }</span><strong> : </strong>
                     <span>{ seconds <10 && '0' }{ seconds }</span>
