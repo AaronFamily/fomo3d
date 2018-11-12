@@ -19,8 +19,8 @@ class RightRound extends Component {
     render() {
         return (
             <div className="rightRound">
-                <img className="accordion-common-yiwen" src={doubt} alt="doubt"/>
-                <div className="accordion-common-title">购买截止</div>
+                {/* <img className="accordion-common-yiwen" src={doubt} alt="doubt"/>
+                <div className="accordion-common-title">购买截止</div> */}
                 <Countdown endTime={ 1541692470968+10000000*60*1000 } fontSize='16px' />
                 <ul className="rightRound-ul">
                     <li className="rightRound-ul-li">

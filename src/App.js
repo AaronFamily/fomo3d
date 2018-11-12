@@ -15,7 +15,10 @@ class App extends Component {
           <Head></Head>
           <Home></Home>
         </div>
-        <div className="g-footer">footer</div>
+        <div className="g-footer">
+          <p>©2018 JUST团队</p>
+          <p>版权所有</p>
+        </div>
       </div>
     )
   }
