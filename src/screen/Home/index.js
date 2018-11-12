@@ -43,13 +43,20 @@ class Home extends Component {
 					</div>
           			{/* 倒计时 */}
 					<Countdown endTime={ 1541692470968+10000000*60*1000 } fontSize='22px' />
-					<div className="trophy">
-						<Row>
-							<Col xs="12" sm="12" md="4" lg="4" xl="4"><img src={secondPrize}/><span className="trophy-secondPrize">点击查看</span></Col>
-							<Col xs="12" sm="12" md="4" lg="4" xl="4"><img src={firstPrize}/><span>点击查看</span></Col>
-							<Col xs="12" sm="12" md="4" lg="4" xl="4"><img src={thirdPrize}/><span className="trophy-thirdPrize">点击查看</span></Col>
-						</Row>
-					</div>
+					<ul className="trophy">
+						<li className="trophy-left">
+							<img src={secondPrize}/>
+							<span className="trophy-secondPrize">点击查看</span>
+						</li>
+						<li>
+							<img src={firstPrize}/>
+							<span>点击查看</span>
+						</li>
+						<li className="trophy-right">
+							<img src={thirdPrize}/>
+							<span className="trophy-thirdPrize">点击查看</span>
+						</li>
+					</ul>
           {/* 购买欢乐币 */}
           <div className="gradient-bg buy">购买欢乐币</div>
           {/* tab切换 */}

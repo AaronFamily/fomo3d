@@ -10,34 +10,56 @@
     .title{
         text-align: center;
         margin-top: 1.6%;
-        margin-bottom: 7.2%;
+        margin-bottom: 12.2%;
     }
 
     .trophy{
-        height: auto;
-        margin-bottom: 2%;
-        margin-top: 20px;
-        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        margin-top: 30px;
+        
+        li{
+            position: relative;
+            z-index: 2;
 
-        img{
-            width: 100%;
-            height: auto;
-            // position: absolute;
-            right: 0;
-            bottom: 0;
+            &.trophy-left{
+                margin-right: -14%;
+                z-index: 1;
+            }
+
+            &.trophy-right{
+                margin-left: -12%;
+                z-index: 1;
+            }
+
+            img{
+                width: 100%;
+            }
+
+            .center{
+                
+            }
+    
+            span{
+                position: absolute;
+                font-size: 13px;
+                right: 23%;
+                bottom: 13%;
+                cursor: pointer;
+                color: #fff;
+            }
         }
-        span{
-            position: absolute;
-            right: 70px;
-            bottom: 28px;
-            cursor: pointer;
-            color: #fff;
-        }
+
+        
         .trophy-secondPrize{
-            right: 100px;
+            right: 34%;
+            bottom: 16%;
         }
+
         .trophy-thirdPrize{
-            right: 76px;
+            right: 24%;
+            bottom: 16%;
         }
     }
 
