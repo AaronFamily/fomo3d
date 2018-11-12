@@ -13,20 +13,38 @@
     }
 
     .trophy{
-        height: 416px;
-        background-color: cadetblue;
+        height: auto;
         margin-bottom: 2%;
+        margin-top: 20px;
+        position: relative;
+
+        img{
+            width: 100%;
+            height: auto;
+            // position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+        span{
+            position: absolute;
+            right: 70px;
+            bottom: 28px;
+            cursor: pointer;
+            color: #fff;
+        }
+        .trophy-secondPrize{
+            right: 100px;
+        }
+        .trophy-thirdPrize{
+            right: 76px;
+        }
     }
 
     .buy{
-        width: 200px;
+        width: 300px;
         height: 40px;
         line-height: 40px;
         font-size: 18px;
-        color: #fff;
-        background: linear-gradient(to right, #1DE2E8 0%, #B333F8 100%);
-        text-align: center;
-        border-radius: 4px;
         margin: 0 auto;
     }
 }

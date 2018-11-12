@@ -4,7 +4,7 @@
     height: 400px;
     width: 100%;
     color: #fff;
-
+    position: relative;
 
     .Accordion_left{
         float: left;
@@ -26,13 +26,28 @@
             border-bottom : 2px solid;
             border-image:-webkit-linear-gradient(left, #1DE2E8 0%, #B333F8 100%) 5;
             // box-shadow: #eee 10px 10px 30px 5px ;//边框阴影
+            font-size: 18px;
         }
     }
     .Accordion_right{
         float: left;
         width: 85%;
         background: #5C81F5;
-        height: 600px;
+        height: 400px;
         border-radius: 4px;
+        padding: 15px 20px;
     }
+}
+
+.accordion-common-title{
+    font-size: 16px;
+    text-align: center;
+    // height: 50px;
+}
+.accordion-common-yiwen{
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    width: 30px;
+    cursor: pointer;
 }
