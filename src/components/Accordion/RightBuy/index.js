@@ -17,8 +17,8 @@ class RightBuy extends Component {
     render() {
         return (
             <div className="rightBuy">
-                <img className="accordion-common-yiwen" src={doubt} alt="doubt"/>
-                <div className="accordion-common-title">最近购买</div>
+                {/* <img className="accordion-common-yiwen" src={doubt} alt="doubt"/>
+                <div className="accordion-common-title">最近购买</div> */}
                 <ul className="rightBuy-list rightBuy-list-big">
                     <li>
                         <div className="leftInvite-list-li-left">用户名</div>

@@ -21,13 +21,13 @@ class Home extends Component {
 
 		this.state = {
 			tabListLeft : [
-				{name : '购买',componentsName : LeftBuy},
-				{name : '邀请',componentsName : LeftInvite},
+				{name : '购买',tabTitle:'购买欢乐币',componentsName : LeftBuy},
+				{name : '邀请',tabTitle:'邀请',componentsName : LeftInvite},
 			],
 			tabListRight : [
-				{name : '回合',componentsName : RightRound},
-				{name : '最近购买',componentsName : RightBuy},
-				{name : '统计',componentsName : RightStatistical},
+				{name : '回合',tabTitle:'购买截止',componentsName : RightRound},
+				{name : '最近购买',tabTitle:'最近购买',componentsName : RightBuy},
+				{name : '统计',tabTitle:'统计',componentsName : RightStatistical},
 			],
 		};
 	}

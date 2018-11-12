@@ -7,15 +7,17 @@ import requests from '../../utils/requests'
 // import RightRound from './RightRound/index'
 // import RightStatistical from './RightStatistical/index'
 
+import { doubt,goldCoins } from '../../image/index'
 import './index.less'
 
 class Accordion extends Component {
     constructor(props) {
         super(props);
-    
+        console.log(props)
         this.state = { 
             checkNum : 0,
             tabList : props.list,
+            tabTitle : props.list[0].tabTitle,
             ThisComponentsName : props.list[0].componentsName
         };
     }
@@ -29,27 +31,30 @@ class Accordion extends Component {
         return this.state.tabList.map((item,index)=>{
             return (
                 <li key={item.name} 
-                    onClick={() =>that.clickTab(index,item.componentsName)} 
+                    onClick={() =>that.clickTab(index,item.componentsName,item.tabTitle)} 
                     className={ that.state.checkNum == index ? 'Accordion_left_li_active' : '' }>{item.name}
                 </li>
             )
         })
     }
-    clickTab (index,componentsName) {
+    clickTab (index,componentsName,tabTitle) {
         this.setState({
             checkNum : index,
-            ThisComponentsName : componentsName
+            ThisComponentsName : componentsName,
+            tabTitle : tabTitle
         })
     }
 
     render() {
-        const { ThisComponentsName } = this.state
+        const { ThisComponentsName,tabTitle } = this.state
         return (
             <div className="Accordion">
                 <ul className="Accordion_left">
                     {this._eachTabList()}
                 </ul>
                 <div className="Accordion_right">
+                    <img className="accordion-common-yiwen" src={doubt} alt="doubt"/>
+                    <div className="accordion-common-title">{tabTitle}</div>
                     <ThisComponentsName></ThisComponentsName>
                 </div>
             </div>

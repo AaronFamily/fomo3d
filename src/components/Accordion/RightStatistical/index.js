@@ -17,8 +17,8 @@ class RightStatistical extends Component {
     render() {
         return (
             <div className="rightStatistical">
-                <img className="accordion-common-yiwen" src={doubt} alt="doubt"/>
-                <div className="accordion-common-title">统计</div>
+                {/* <img className="accordion-common-yiwen" src={doubt} alt="doubt"/>
+                <div className="accordion-common-title">统计</div> */}
                 <ul className="rightStatistical-list">
                     <li>
                         <div className="rightStatistical-list-li-left">总投资</div>

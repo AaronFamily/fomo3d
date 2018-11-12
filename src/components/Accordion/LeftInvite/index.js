@@ -21,8 +21,8 @@ class LeftInvite extends Component {
     render() {
         return (
             <div className="leftInvite">
-                <img className="accordion-common-yiwen" src={doubt} alt="doubt"/>
-                <div className="accordion-common-title">邀请</div>
+                {/* <img className="accordion-common-yiwen" src={doubt} alt="doubt"/>
+                <div className="accordion-common-title">邀请</div> */}
                 <div className="leftInvite-main">
                     <div>我的地址</div>
                     <InputGroup className="leftInvite-main-inp">
