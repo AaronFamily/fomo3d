@@ -41,7 +41,6 @@ const httpFactory = method => (url, params = {}, axiosOptions, isLoading = true)
 
 		axios(options)
 		.then(result => {
-            
             console.log(result.data)
             if (result.status !== 200) {
                 return reject(result.data || '接口错误')

@@ -4,6 +4,16 @@ import { doubt } from '../../image/index'
 import './index.less'
 
 export default class extends Component {
+    static defaultProps = {
+        tabList: [],
+        tabTitle: '',
+        ThisComponentsName: null,
+        alert: {
+            title: '',
+            children: []
+        }
+    }
+    
     constructor(props) {
         super(props)
 
@@ -11,7 +21,9 @@ export default class extends Component {
             checkNum: 0,
             tabList: props.list,
             tabTitle: props.list[0].tabTitle,
-            ThisComponentsName: props.list[0].componentsName
+            ThisComponentsName: props.list[0].componentsName,
+            isMask: false,
+            alert: props.list[0].alert
         }
 
         this.tabBgColor = this.props.tabBgColor || '#2C4182'
@@ -26,7 +38,7 @@ export default class extends Component {
         return this.state.tabList.map((item,index)=>{
             return (
                 <li key={item.name} 
-                    onClick={() => this.clickTab(index,item.componentsName,item.tabTitle)} 
+                    onClick={() => this.clickTab(index, item.componentsName, item.tabTitle, item.alert)} 
                     className={ this.state.checkNum === index ? 'Accordion_left_li_active' : '' }
                 >
                     { item.name }
@@ -34,16 +46,26 @@ export default class extends Component {
             )
         })
     }
-    clickTab (index,componentsName,tabTitle) {
+    
+    clickTab (index, componentsName, tabTitle, alert) {
         this.setState({
             checkNum: index,
             ThisComponentsName: componentsName,
-            tabTitle: tabTitle
+            tabTitle: tabTitle,
+            alert: alert
         })
     }
 
+    closeMask () {
+        this.setState({ isMask: false })
+    }
+
+    showMask () {
+        this.setState({ isMask: true })
+    }
+
     render() {
-        const { ThisComponentsName, tabTitle } = this.state
+        const { ThisComponentsName, tabTitle, alert } = this.state
 
         return (
             <div className="Accordion">
@@ -51,10 +73,28 @@ export default class extends Component {
                     { this._eachTabList() }
                 </ul>
                 <div className="Accordion_right" style={ { backgroundColor: this.cBgColor } }>
-                    <img className="accordion-common-yiwen" src={ doubt } alt="doubt"/>
+                    <img className="accordion-common-yiwen" src={ doubt } onClick={ this.showMask.bind(this) } alt="doubt"/>
                     <div className="accordion-common-title">{ tabTitle }</div>
                     <ThisComponentsName user={ this.props.user }></ThisComponentsName>
                 </div>
+                {
+                    !!alert && this.state.isMask && <div className="accordion-mask">
+                    <div className="accordion-mask-content d-none d-md-block">
+                        <div className="accordion-mask-close" onClick={ this.closeMask.bind(this) }>X</div>
+                        <div className="accordion-mask-main">
+                            { alert.title && <h3>{ alert.title }</h3> }
+                            { alert.children.map(item => <p key={item}>{ item }</p>) }
+                        </div>
+                    </div>
+                    <div className="d-md-none accordion-md-mask-content">
+                        <div className="accordion-mask-close" onClick={ this.closeMask.bind(this) }>X</div>
+                            <div className="accordion-mask-main">
+                                { alert.title && <h3>{ alert.title }</h3> }
+                                { alert.children.map(item => <p key={item}>{ item }</p>) }
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         )
     }
