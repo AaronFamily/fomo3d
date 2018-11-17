@@ -28,15 +28,15 @@ class RightBuy extends Component {
                 <ul className="rightBuy-list">
                     <li>
                         <div className="leftInvite-list-li-left">投影墨水</div>
-                        <div className="leftInvite-list-li-right">0.0248ETH</div>
+                        <div className="leftInvite-list-li-right">0.007ETH</div>
                     </li>
                     <li>
                         <div className="leftInvite-list-li-left">防霉模具</div>
-                        <div className="leftInvite-list-li-right">0.0248ETH</div>
+                        <div className="leftInvite-list-li-right">0.007ETH</div>
                     </li>
                     <li>
                         <div className="leftInvite-list-li-left">哈吉激光</div>
-                        <div className="leftInvite-list-li-right">0.0248ETH</div>
+                        <div className="leftInvite-list-li-right">0.007ETH</div>
                     </li>
                 </ul>
             </div>

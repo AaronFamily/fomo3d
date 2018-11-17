@@ -3,13 +3,13 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding: 0 9% 0 9%;
+        // padding: 0 20px;
         align-items: center;
     }
 
     .title{
         text-align: center;
-        margin-top: 1.6%;
+        margin-top: 16px;
         margin-bottom: 12.2%;
     }
 
@@ -29,45 +29,83 @@
             }
 
             &.trophy-right{
-                margin-left: -12%;
+                margin-left: -9%;
                 z-index: 1;
             }
 
             img{
                 width: 100%;
             }
+    
+            span{
+                position: absolute;
+                font-size: 13px;
+                left: 12%;
+                bottom: 18%;
+                cursor: pointer;
+                color: #fff;
 
-            .center{
-                
+                &.trophy-secondPrize{
+                    left: 12%;
+                    bottom: 18%;
+                }
+        
+                &.trophy-thirdPrize{
+                    left: 24%;
+                    bottom: 18%;
+                }
+            }
+        }
+    }
+
+    .md-trophy{
+        width: 70%;
+        margin: 30px auto 0;
+        
+        li{
+            position: relative;
+
+            img{
+                width: 100%;
             }
     
             span{
                 position: absolute;
                 font-size: 13px;
-                right: 23%;
-                bottom: 13%;
+                left: 16%;
+                bottom: 18%;
                 cursor: pointer;
                 color: #fff;
-            }
-        }
 
+                &.trophy-secondPrize{
+                    left: 16%;
+                    bottom: 16%;
+                }
         
-        .trophy-secondPrize{
-            right: 34%;
-            bottom: 16%;
-        }
-
-        .trophy-thirdPrize{
-            right: 24%;
-            bottom: 16%;
+                &.trophy-thirdPrize{
+                    left: 16%;
+                    bottom: 16%;
+                }
+            }
         }
     }
 
     .buy{
-        width: 300px;
+        width: 260px;
         height: 40px;
+        border: 0;
         line-height: 40px;
         font-size: 18px;
         margin: 0 auto;
+        cursor: pointer;
+        outline: none
+    }
+
+    .accordion-box{
+        width: 100%;
+       
+        .inline-block{
+            display: inline-block;
+        }
     }
 }

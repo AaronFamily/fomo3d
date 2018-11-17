@@ -1,65 +1,61 @@
 import React, { Component } from 'react'
-import requests from '../../utils/requests'
 
-// import LeftBuy from './LeftBuy/index'
-// import LeftInvite from './LeftInvite/index'
-// import RightBuy from './RightBuy/index'
-// import RightRound from './RightRound/index'
-// import RightStatistical from './RightStatistical/index'
-
-import { doubt,goldCoins } from '../../image/index'
+import { doubt } from '../../image/index'
 import './index.less'
 
-class Accordion extends Component {
+export default class extends Component {
     constructor(props) {
-        super(props);
-        console.log(props)
-        this.state = { 
-            checkNum : 0,
-            tabList : props.list,
-            tabTitle : props.list[0].tabTitle,
-            ThisComponentsName : props.list[0].componentsName
-        };
+        super(props)
+
+        this.state = {
+            checkNum: 0,
+            tabList: props.list,
+            tabTitle: props.list[0].tabTitle,
+            ThisComponentsName: props.list[0].componentsName
+        }
+
+        this.tabBgColor = this.props.tabBgColor || '#2C4182'
+        this.cBgColor = this.props.cBgColor || '#5C81F5'
     }
 
-    componentDidMount () {
+    async componentDidMount () {
         this._eachTabList()
     }
 
     _eachTabList () {
-        var that = this
         return this.state.tabList.map((item,index)=>{
             return (
                 <li key={item.name} 
-                    onClick={() =>that.clickTab(index,item.componentsName,item.tabTitle)} 
-                    className={ that.state.checkNum == index ? 'Accordion_left_li_active' : '' }>{item.name}
+                    onClick={() => this.clickTab(index,item.componentsName,item.tabTitle)} 
+                    className={ this.state.checkNum === index ? 'Accordion_left_li_active' : '' }
+                >
+                    { item.name }
                 </li>
             )
         })
     }
     clickTab (index,componentsName,tabTitle) {
         this.setState({
-            checkNum : index,
-            ThisComponentsName : componentsName,
-            tabTitle : tabTitle
+            checkNum: index,
+            ThisComponentsName: componentsName,
+            tabTitle: tabTitle
         })
     }
 
     render() {
-        const { ThisComponentsName,tabTitle } = this.state
+        const { ThisComponentsName, tabTitle } = this.state
+
         return (
             <div className="Accordion">
-                <ul className="Accordion_left">
-                    {this._eachTabList()}
+                <ul className="Accordion_left" style={ { backgroundColor: this.tabBgColor } }>
+                    { this._eachTabList() }
                 </ul>
-                <div className="Accordion_right">
-                    <img className="accordion-common-yiwen" src={doubt} alt="doubt"/>
-                    <div className="accordion-common-title">{tabTitle}</div>
-                    <ThisComponentsName></ThisComponentsName>
+                <div className="Accordion_right" style={ { backgroundColor: this.cBgColor } }>
+                    <img className="accordion-common-yiwen" src={ doubt } alt="doubt"/>
+                    <div className="accordion-common-title">{ tabTitle }</div>
+                    <ThisComponentsName user={ this.props.user }></ThisComponentsName>
                 </div>
             </div>
-        );
+        )
     }
 }
-
-export default Accordion

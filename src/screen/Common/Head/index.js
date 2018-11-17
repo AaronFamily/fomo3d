@@ -1,6 +1,6 @@
 import React , {Component} from 'react'
 import { Header, Countdown } from '../../../components/index'
-import { NavItem, NavLink } from 'reactstrap'
+import { NavItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, DropdownItem, Dropdown} from 'reactstrap'
 
 import Modals from '../Modals/index'
 import Login from '../Modals/Login/index'
@@ -18,7 +18,7 @@ export default class extends Component {
         super (props)
         this.state = {
             loginOrRegister : 'Login',
-            ModalsIsShow : false,
+            ModalsIsShow : false
         }
 
     }
@@ -42,26 +42,58 @@ export default class extends Component {
                         </div>
                     </NavItem>
                     <NavItem className="col-md-2 col-lg-2"></NavItem>
-                    <NavItem className="col-md-3 col-lg-3 head-vertical-center">
+                    {/* <NavItem className="col-md-3 col-lg-3 head-vertical-center">
                         <div className="head-flex-row pull-right">
                             <img className="g-header-icon head-user-icon" src={ user } alt="user"/>
                             <div className="head-user-text login-register">
-                                <div onClick={()=>this.showModel('Login')} className={ loginOrRegister === 'Login' ? 'header-active-login' : ''}>登录</div>
-                                <div onClick={()=>this.showModel('ModalRegister')} className={ loginOrRegister === 'ModalRegister' ? 'header-active-login' : ''}>注册</div>
+                                <div onClick={()=>this.showModel('Login')} className="header-active-login">登录</div>
+                                <div onClick={()=>this.showModel('ModalRegister')}>注册</div>
                             </div>
                         </div>
-                    </NavItem>
-                    <NavItem className="col-md-1 col-lg-1 pull-right head-vertical-center">
-                        EN V
-                    </NavItem>
+                    </NavItem> */}
+                    <UncontrolledDropdown nav inNavbar className="col-md-3 col-lg-3 head-vertical-center">
+                        <div>
+                            <DropdownToggle nav>
+                                <img className="g-header-icon head-user-icon user-portrait" src={ user } alt=""/>
+                                shenweikang
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem>
+                                    退出
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </div>
+                    </UncontrolledDropdown>
+                    <UncontrolledDropdown nav inNavbar className="col-md-1 col-lg-1 pull-right head-vertical-center">
+                        <div>
+                            <DropdownToggle nav>
+                                EN V
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem>
+                                    中文
+                                </DropdownItem>
+                                <DropdownItem>
+                                    英文
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </div>
+                    </UncontrolledDropdown>
                 </Header>
                 {
                   loginOrRegister == 'Login' ? 
-                  <Login modal={ ModalsIsShow }></Login> :
+                  <Login modal={ ModalsIsShow } goRegister={ this.goRegister.bind(this) }></Login> :
                   <Register modal={ ModalsIsShow }></Register>
                 }
             </div>
         )
+    }
+
+    goRegister () {
+        this.setState({
+            loginOrRegister : 'ModalRegister',
+            ModalsIsShow : true
+        })
     }
 
     showModel (type) {

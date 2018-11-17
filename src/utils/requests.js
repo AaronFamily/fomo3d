@@ -12,20 +12,16 @@ let defaultOptions = {
   data: {},
   timeout: 8000,
   auth: {},
-  responseType: 'json'
+  responseType: 'text',
+  validateStatus: () => true
 }
 
 const httpFactory = method => (url, params = {}, axiosOptions, isLoading = true) => {
 	const options = { ...defaultOptions, ...axiosOptions, method, url }
 
+    
 	if (requestBody.includes(method.toUpperCase())) {
-        if (JSON.stringify(params) !== '{}') {
-			let formData = new FormData()
-
-			for ( let key in params ) formData.append(key, params[key])
-
-			options.body = formData
-		}
+        options.data = params
 	} else { 
 		const query = qs.stringify(params)
 
@@ -39,19 +35,23 @@ const httpFactory = method => (url, params = {}, axiosOptions, isLoading = true)
 			// isLoading && 
 		}
 
-		isLoading && count++
+        isLoading && count++
+        
+        console.log(options)
 
 		axios(options)
 		.then(result => {
-            const resultData = result.data
-            if (resultData.error_code === 0) {
-                resolve(resultData)
+            
+            console.log(result.data)
+            if (result.status !== 200) {
+                return reject(result.data || '接口错误')
             } else {
-                reject(resultData.err_msg, result, options)
+                resolve(result.data)
             }
         })
-        .catch((e) => {
-			reject('请求失败', e, options)
+        .catch(e => {
+            console.log('请求失败', e)
+			reject('Server Error', e)
 		})
         .finally(() => {
             isLoading && count--
