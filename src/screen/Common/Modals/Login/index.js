@@ -4,6 +4,8 @@ import {
     InputGroup, Input 
 } from 'reactstrap';
 
+import { Toast } from '../../../../components/index'
+
 import requests from '../../../../utils/requests'
 
 import '../index.less'
@@ -14,6 +16,9 @@ class Login extends Component {
     constructor (props) {
         super (props)
         this.state = {
+            usernameRegular:/^[a-zA-Z0-9_-]{6,20}$/,
+            passwordRegular:/^.*(?=.{6,20})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/,
+            tip:'',
             modal: props.modal,
             username : '',
             password : ''
@@ -28,12 +33,13 @@ class Login extends Component {
     }
 
     render (){
-        const { username, password } = this.state
+        const { tip,username, password } = this.state
         return (
             <div className="login">
                 <Modal isOpen={this.state.modal} toggle={this.toggle} className={`${this.props.className} login-modal`}>
                     <ModalHeader toggle={this.toggle}>登录</ModalHeader>
                     <ModalBody>
+                        <div className="login-tip">{tip}</div>
                         <InputGroup>
                             <Input value={ username } onChange={ e => this.changeState('username', e.target.value) } placeholder="请输入用户名" />
                         </InputGroup>
@@ -57,7 +63,23 @@ class Login extends Component {
     }
 
     validation () {
-        this.registered()
+        const { usernameRegular,passwordRegular,username,password } = this.state
+        try {
+            if(!usernameRegular.test(username)){
+                throw '用户名格式为：6到20位字符'
+            }
+            if(!passwordRegular.test(password)){
+                throw '密码格式为：6到20位（至少1个大写字母，1个小写字母，1个数字，1个特殊字符）'
+            }
+        } catch (error) {
+            this.setState({
+                tip : error
+            })
+            return false
+        }
+        this.setState({
+            tip : ''
+        },()=>this.registered())
     }
 
     async registered () {
@@ -65,10 +87,10 @@ class Login extends Component {
 
         try {
             const result = await this.props.post(`/auth/form?username=${ username }&password=${ password }`)
-            alert('登陆成功')
+            Toast.success('登陆成功')
             console.log(result)
         } catch (error) {
-            alert('登陆失败')
+            Toast.error('登陆失败')
             console.log(error)
         }
         

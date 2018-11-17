@@ -1,8 +1,10 @@
 import React , {Component} from 'react'
 import { 
     Button, Modal, ModalHeader, ModalBody,
-    InputGroup, InputGroupAddon, Input  
+    InputGroup, InputGroupAddon, Input ,
 } from 'reactstrap'
+
+import { Toast } from '../../../../components/index'
 
 import requests from '../../../../utils/requests'
 
@@ -14,13 +16,21 @@ class Register extends Component {
     constructor (props) {
         super (props)
         this.state = {
+            addressRegular : '',
+            usernameRegular : /^[a-zA-Z0-9_-]{6,20}$/,
+            passwordRegular : /^.*(?=.{6,20})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/,
+            emailRegularRegular : /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
+            verifyCodeRegular : /^\d{6}$/,
+            inviterCodeRegular : /^D[0-9]{6}/,
+            tip:'',
             modal: props.modal,
             address: '',
             email: '',
             password: '',
             username: '',
             verifyCode: '',
-            inviterCode: ''
+            inviterCode: '',
+            verifyTime : 0,
         }
 
         this.toggle = this.toggle.bind(this)
@@ -33,13 +43,14 @@ class Register extends Component {
     }
 
     render (){
-        const { address, email, password, username, verifyCode, inviterCode } = this.state
+        const { tip,address, email, password, username, verifyCode, inviterCode } = this.state
 
         return (
             <div className="register">
                 <Modal isOpen={this.state.modal} toggle={this.toggle} className={`${this.props.className} register`}>
                     <ModalHeader toggle={this.toggle}>注册</ModalHeader>
                     <ModalBody>
+                        <div className="login-tip">{tip}</div>
                         <InputGroup>
                             <Input value={ address } onChange={ e => this.changeState('address', e.target.value) } placeholder="请输入钱包地址" />
                         </InputGroup>
@@ -54,8 +65,12 @@ class Register extends Component {
                         </InputGroup>
                         <InputGroup>
                             <Input value={ verifyCode } onChange={ e => this.changeState('verifyCode', e.target.value) } placeholder="请输入验证码"/>
-                            <InputGroupAddon addonType="prepend">
-                                <Button onClick={ e => this.obtainCode(e) }>获取验证码</Button>
+                            <InputGroupAddon addonType="prepend" style={{width:'110px'}}>
+                                {
+                                    this.state.verifyTime>0 ?
+                                    <div className="verifyTime">{this.state.verifyTime}s</div> :
+                                    <Button onClick={ e => this.obtainCode(e) }>获取验证码</Button>
+                                }
                             </InputGroupAddon>
                         </InputGroup>
                         <InputGroup>
@@ -73,20 +88,70 @@ class Register extends Component {
     }
 
     async obtainCode () {
+        const {emailRegularRegular,email} = this.state
         try {
-            const result = await this.props.post(`/auth/verify_code?email=${ this.state.email }`)
-
-            alert('验证码已发送请注意查收')
-            console.log(result)
+            if(!emailRegularRegular.test(email)){
+                throw '请输入正确格式的邮箱'
+            }
         } catch (error) {
-            alert('发送失败，请稍后再试')
+            this.setState({
+                tip : error
+            })
+            return false
+        }
+        try {
+            
+            await this.props.post(`/auth/verify_code?email=${ email }`)
+            let seconds = 60
+            
+            this.timeOut = setInterval( () => {
+                if(seconds <= 0){
+                    clearTimeout(this.timeOut)
+                }
+                seconds--
+                this.setState({ verifyTime : seconds })
+            }, 1000)
+
+            Toast.success('验证码已发送请注意查收')
+        } catch (error) {
+            Toast.error('发送失败，请稍后再试')
             console.log(error)
         }
-        
     }
 
     validation () {
-        this.registered()
+        const { 
+            addressRegular,usernameRegular,passwordRegular,
+            emailRegularRegular,verifyCodeRegular,inviterCodeRegular,
+            address,email,password,username,verifyCode,inviterCode} = this.state
+        try {
+            if(!(/^(0x)?[0-9a-f]{40}$/.test(address) || /^(0x)?[0-9A-F]{40}$/.test(address))){
+                throw '请输入正确有效的钱包地址'
+            }
+            if(!usernameRegular.test(username)){
+                throw '用户名格式为：6到20位字符'
+            }
+            if(!passwordRegular.test(password)){
+                throw '密码格式为：6到20位（至少1个大写字母，1个小写字母，1个数字，1个特殊字符）'
+            }
+            if(!emailRegularRegular.test(email)){
+                throw '请输入正确格式的邮箱'
+            }
+            if(!verifyCodeRegular.test(verifyCode)){
+                throw '请输入正确格式验证码'
+            }
+            if(inviterCode && !inviterCodeRegular.test(inviterCode)){
+                throw '请输入正确有效的邀请码'
+            }
+        } catch (error) {
+            this.setState({
+                tip : error
+            })
+            return false
+        }
+        this.setState({
+            tip : ''
+        },()=>this.registered())
     }
 
     async registered () {
@@ -99,10 +164,10 @@ class Register extends Component {
                 password,
                 username,
             })
-            alert('注册成功')
+            Toast.success('注册成功')
             console.log(result)
         } catch (error) {
-            alert('注册失败')
+            Toast.error('注册失败')
             console.log(error)
         }
         

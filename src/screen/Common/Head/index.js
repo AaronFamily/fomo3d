@@ -5,6 +5,7 @@ import { NavItem, DropdownMenu, DropdownToggle, UncontrolledDropdown, DropdownIt
 import Modals from '../Modals/index'
 import Login from '../Modals/Login/index'
 import Register from '../Modals/Register/index'
+import ForgetPwd from '../Modals/ForgetPwd/index'
 
 import {
     funnel,
@@ -42,7 +43,7 @@ export default class extends Component {
                         </div>
                     </NavItem>
                     <NavItem className="col-md-2 col-lg-2"></NavItem>
-                    {/* <NavItem className="col-md-3 col-lg-3 head-vertical-center">
+                    <NavItem className="col-md-3 col-lg-3 head-vertical-center">
                         <div className="head-flex-row pull-right">
                             <img className="g-header-icon head-user-icon" src={ user } alt="user"/>
                             <div className="head-user-text login-register">
@@ -50,8 +51,8 @@ export default class extends Component {
                                 <div onClick={()=>this.showModel('ModalRegister')}>注册</div>
                             </div>
                         </div>
-                    </NavItem> */}
-                    <UncontrolledDropdown nav inNavbar className="col-md-3 col-lg-3 head-vertical-center">
+                    </NavItem>
+                    {/* <UncontrolledDropdown nav inNavbar className="col-md-3 col-lg-3 head-vertical-center">
                         <div>
                             <DropdownToggle nav>
                                 <img className="g-header-icon head-user-icon user-portrait" src={ user } alt=""/>
@@ -63,7 +64,7 @@ export default class extends Component {
                                 </DropdownItem>
                             </DropdownMenu>
                         </div>
-                    </UncontrolledDropdown>
+                    </UncontrolledDropdown> */}
                     <UncontrolledDropdown nav inNavbar className="col-md-1 col-lg-1 pull-right head-vertical-center">
                         <div>
                             <DropdownToggle nav>
@@ -81,17 +82,36 @@ export default class extends Component {
                     </UncontrolledDropdown>
                 </Header>
                 {
-                  loginOrRegister == 'Login' ? 
-                  <Login modal={ ModalsIsShow } goRegister={ this.goRegister.bind(this) }></Login> :
-                  <Register modal={ ModalsIsShow }></Register>
+                  this._toogleModal()
                 }
             </div>
         )
     }
 
+    _toogleModal () {
+        const { ModalsIsShow } = this.state
+        switch (this.state.loginOrRegister) {
+            case 'Login':
+                return <Login modal={ ModalsIsShow } goForget={ this.goForget.bind(this) } goRegister={ this.goRegister.bind(this) }></Login>
+            case 'ModalRegister':
+                return <Register modal={ ModalsIsShow }></Register>
+            case 'Forget':
+                return <ForgetPwd modal={ ModalsIsShow }></ForgetPwd>
+            default:
+                return <Login modal={ ModalsIsShow } goForget={ this.goForget.bind(this) } goRegister={ this.goRegister.bind(this) }></Login>
+        }
+    }
+
     goRegister () {
         this.setState({
             loginOrRegister : 'ModalRegister',
+            ModalsIsShow : true
+        })
+    }
+
+    goForget () {
+        this.setState({
+            loginOrRegister : 'Forget',
             ModalsIsShow : true
         })
     }
