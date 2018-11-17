@@ -10,6 +10,7 @@ import goldCoins from './gold-coins.png'
 import goldCoinsDeep from './gold-coins-deep.png'
 import title from './title.png'
 import user from './user.png'
+import qrCode from './qrCode.jpg'
 
 export {
     bg,
@@ -23,5 +24,6 @@ export {
     goldCoins,
     goldCoinsDeep,
     title,
-    user
+    user,
+    qrCode
 }

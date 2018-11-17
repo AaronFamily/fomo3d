@@ -53,3 +53,108 @@
     width: 30px;
     cursor: pointer;
 }
+
+.accordion-mask{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: rgba(7,29,57,0.5);
+    z-index: 999;
+    padding: 1px;
+}
+
+.accordion-mask-content{
+    width: 60%;
+    height: 100%;
+    background-color: #fff;
+    margin: 0 auto;
+    position: relative;
+    
+    .accordion-mask-main{
+        width: 100%;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 40px;
+        color: #666;
+        box-sizing: border-box;
+    }
+
+    h3{
+        color: #333;
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 40px;
+    }
+
+    p{
+        font-size: 14px;
+        line-height:28px;
+    }
+
+    .accordion-mask-close{
+        position: absolute;
+        top: 20%;
+        right: -46px;
+        width: 46px;
+        height: 66px;
+        line-height: 66px;
+        text-align: center;
+        cursor: pointer;
+        background-color: #000;
+        color: #fff;
+        font-size: 18px;
+    }
+}
+
+
+
+.accordion-md-mask-content{
+    width: 86%;
+    height: 80%;
+    background-color: #fff;
+    margin: 30px auto 0;
+    position: relative;
+    
+    .accordion-mask-main{
+        width: 100%;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 40px;
+        color: #666;
+        box-sizing: border-box;
+    }
+
+    h3{
+        color: #333;
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 40px;
+    }
+
+    p{
+        font-size: 14px;
+        line-height:28px;
+    }
+
+    .accordion-mask-close{
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -80px;
+        margin: auto;
+        width: 46px;
+        height: 46px;
+        line-height: 46px;
+        text-align: center;
+        cursor: pointer;
+        background-color: #000;
+        color: #fff;
+        font-size: 18px;
+        border-radius: 46px;
+    }
+}

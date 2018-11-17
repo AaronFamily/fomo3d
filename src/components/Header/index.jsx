@@ -35,7 +35,7 @@ export default class extends Component {
             <NavbarBrand className="text-white pr-3" href="/">{ this.props.title }</NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="col-lg-12 col-md-12 text-white " navbar>
+            <Nav className="col-lg-12 col-md-12 text-white" navbar>
                 { this.props.children }
             </Nav>
             </Collapse>

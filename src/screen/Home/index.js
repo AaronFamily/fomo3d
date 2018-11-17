@@ -1,21 +1,26 @@
 import React, { Component } from 'react'
-import { Row, Col } from 'reactstrap'
-
+import { connect } from 'react-redux'
 import { Countdown, Accordion } from '../../components/index'
 import { title } from '../../image/index'
 
-import LeftBuy from '../../components/Accordion/LeftBuy/index'
-import LeftInvite from '../../components/Accordion/LeftInvite/index'
-import RightBuy from '../../components/Accordion/RightBuy/index'
-import RightRound from '../../components/Accordion/RightRound/index'
-import RightStatistical from '../../components/Accordion/RightStatistical/index'
+import LeftBuy from './LeftBuy/index'
+import LeftInvite from './LeftInvite/index'
+import RightBuy from './RightBuy/index'
+import RightRound from './RightRound/index'
+import RightStatistical from './RightStatistical/index'
 
 import Trophy from './Trophy'
+import { setUserInfo, setTime, resetLoginStatus } from '../../store/action'
 
 import requests from '../../utils/requests'
 
 import './index.less'
 
+@connect(null, dispatch => ({
+	setUserInfo: data => dispatch(setUserInfo(data)),
+	setTime: time => dispatch(setTime(time)),
+	resetLoginStatus: bool => dispatch(resetLoginStatus(bool))
+}))
 @requests()
 class Home extends Component {
 	constructor(props) {
@@ -23,47 +28,86 @@ class Home extends Component {
 
 		this.state = {
 			tabListLeft : [
-				{name : '购买',tabTitle:'购买欢乐币',componentsName : LeftBuy},
-				{name : '邀请',tabTitle:'邀请',componentsName : LeftInvite},
+				{
+					name: '购买',
+					tabTitle: '购买欢乐币',
+					componentsName: LeftBuy,
+					alert: {
+						title: '展示性弹框',
+						children: [
+							'简单的介绍内容'
+						]
+					}
+				},
+				{
+					name: '邀请',
+					tabTitle: '邀请',
+					componentsName: LeftInvite,
+					alert: {
+						title: '展示性弹框',
+						children: [
+							'简单的介绍内容'
+						]
+					}
+				},
 			],
 			tabListRight : [
-				{name : '回合',tabTitle:'购买截止',componentsName : RightRound},
-				{name : '最近购买',tabTitle:'最近购买',componentsName : RightBuy},
-				{name : '统计',tabTitle:'统计',componentsName : RightStatistical},
+				{
+					name: '回合',
+					tabTitle: '购买截止',
+					componentsName: RightRound,
+					alert: {
+						title: '展示性弹框',
+						children: [
+							'简单的介绍内容'
+						]
+					}
+				},
+				{
+					name: '最近购买',
+					tabTitle: '最近购买',
+					componentsName: RightBuy,
+					alert: {
+						title: '展示性弹框',
+						children: [
+							'简单的介绍内容'
+						]
+					}
+				},
+				{ 
+					name: '统计',
+					tabTitle: '统计',
+					componentsName :RightStatistical,
+					alert: {
+						title: '展示性弹框',
+						children: [
+							'简单的介绍内容'
+						]
+					}
+				}
 			],
-			user: {
-				address: '',
-				email: '',
-				friend1: 0,
-				friend2: 0,
-				inviterCode: '',
-				username: 'shenweikang001'
-			}
+			time: 0,
+			rank: ["???", "???", "???"]
 		}
 	}
 
 	render() {
 		const { tabListLeft,tabListRight } = this.state
+
 		return (
 			<div className="home">
 				<div className="main">
-					{/* 标题 */}
 					<div className="title">
 						<img className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" src={ title } alt=""/>
 					</div>
-          			{/* 倒计时 */}
-					<Countdown endTime={ 1541692470968+10000000*60*1000 } fontSize='22px' />
-					{/* 奖杯部分 */}
-					<Trophy />
-					{/* 购买欢乐币 */}
-					<button className="gradient-bg buy">购买欢乐币</button>
-					{/* tab切换 */}
+					<Countdown endTime={ this.state.time } fontSize='22px'/>
+					<Trophy rank={ this.state.rank }/>
 					<div className="accordion-box">
 						<div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 inline-block">
-							<Accordion user={ this.state.user } list={ tabListLeft } />
+							<Accordion list={ tabListLeft } />
 						</div>
 						<div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 inline-block">
-							<Accordion user={ this.state.user } list={ tabListRight } tabBgColor="#41338B" cBgColor="#614DD0"/>
+							<Accordion list={ tabListRight } tabBgColor="#41338B" cBgColor="#614DD0"/>
 						</div>
 					</div>
 				</div>
@@ -71,25 +115,39 @@ class Home extends Component {
 		)
 	}
 
-	async componentDidMount () {
+	componentDidMount () {
+		this.getPlatformData()
+		this.getUserInfoData()
+	}
+
+	async getPlatformData () {
+		const rank = await this.props.get('/sessions/rank')
+		const time = await this.props.get('/sessions/time')
+		const statistics = await this.props.get('/sessions/statistics')
+		const recency = await this.props.get('/sessions/recency')
+
+		this.setState({ time, rank })
+
+		this.props.setUserInfo({
+			rank,
+			time,
+			recency,
+			...statistics
+		})
+	}
+
+	async getUserInfoData () {
 		try {
-			// 获取用户数据
-			const result = await this.props.get('/users')
-			const recency = await this.props.get('/sessions/recency')
+			const result = await this.props.get('/users')	
 			const round = await this.props.get('/sessions/round')
-			const statistics = await this.props.get('/sessions/statistics')
-			const rank = await this.props.get('/sessions/rank')
-			
-			
-			console.log('用户数据', result)
-			console.log('最近购买', recency)
-			console.log('第几轮', round)
-			console.log('统计数据', statistics)
-			console.log('获奖名单', rank)
+			this.props.setUserInfo({
+				...result,
+				...round,
+				isLogin: true
+			})
 		} catch (error) {
-			console.log(error)
+			this.props.resetLoginStatus(false)
 		}
-		
 	}
 }
 
