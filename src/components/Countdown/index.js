@@ -40,6 +40,12 @@ class Countdown extends Component {
         this.timeDown()
     }
 
+    componentWillReceiveProps (nextProps) {
+        this.setState({
+            endTime: nextProps.endTime
+        }, () => this.timeDown())
+    }
+
     componentWillUnmount () {
         clearTimeout(this.timeOut)
     }

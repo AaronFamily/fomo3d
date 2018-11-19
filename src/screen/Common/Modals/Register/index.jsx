@@ -18,7 +18,7 @@ class Register extends Component {
         this.state = {
             addressRegular : '',
             usernameRegular : /^[a-zA-Z0-9_-]{6,20}$/,
-            passwordRegular : /^.*(?=.{6,20})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/,
+            passwordRegular : /^[a-zA-Z]\w{6,20}$/,
             emailRegularRegular : /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
             verifyCodeRegular : /^\d{6}$/,
             inviterCodeRegular : /^D[0-9]{6}/,
@@ -34,6 +34,8 @@ class Register extends Component {
         }
 
         this.toggle = this.toggle.bind(this)
+        this.isFireCode = false
+        this.isRegister = false
     }
 
     toggle() {
@@ -88,7 +90,10 @@ class Register extends Component {
     }
 
     async obtainCode () {
-        const {emailRegularRegular,email} = this.state
+        if (this.isFireCode) return
+
+        const { emailRegularRegular, email } = this.state
+
         try {
             if(!emailRegularRegular.test(email)){
                 throw '请输入正确格式的邮箱'
@@ -101,38 +106,52 @@ class Register extends Component {
         }
         try {
             
+            this.isFireCode = true
+
             await this.props.post(`/auth/verify_code?email=${ email }`)
             let seconds = 60
             
             this.timeOut = setInterval( () => {
                 if(seconds <= 0){
                     clearTimeout(this.timeOut)
+                    this.isFireCode = false
                 }
                 seconds--
                 this.setState({ verifyTime : seconds })
             }, 1000)
-
             Toast.success('验证码已发送请注意查收')
         } catch (error) {
-            Toast.error('发送失败，请稍后再试')
-            console.log(error)
+            Toast.error(error || '发送失败，请稍后再试')
+            this.isFireCode = false
         }
     }
 
     validation () {
+        if (this.isRegister) return
+
         const { 
-            addressRegular,usernameRegular,passwordRegular,
-            emailRegularRegular,verifyCodeRegular,inviterCodeRegular,
-            address,email,password,username,verifyCode,inviterCode} = this.state
+            usernameRegular,
+            passwordRegular,
+            emailRegularRegular,
+            verifyCodeRegular,
+            inviterCodeRegular,
+            address,
+            email,
+            password,
+            username,
+            verifyCode,
+            inviterCode
+        } = this.state
+
         try {
-            if(!(/^(0x)?[0-9a-f]{40}$/.test(address) || /^(0x)?[0-9A-F]{40}$/.test(address))){
+            if(!/^(0x)?[0-9a-f]{40}$/i.test(address)){
                 throw '请输入正确有效的钱包地址'
             }
             if(!usernameRegular.test(username)){
                 throw '用户名格式为：6到20位字符'
             }
             if(!passwordRegular.test(password)){
-                throw '密码格式为：6到20位（至少1个大写字母，1个小写字母，1个数字，1个特殊字符）'
+                throw '密码格式为：以字母开头，长度在6~20 之间，只能包含字符、数字和下划线'
             }
             if(!emailRegularRegular.test(email)){
                 throw '请输入正确格式的邮箱'
@@ -156,19 +175,22 @@ class Register extends Component {
 
     async registered () {
         const { address, email, password, username, verifyCode, inviterCode } = this.state
+        this.isRegister = true
 
         try {
-            const result = await this.props.post(`/users?verifyCode=${ verifyCode }&inviterCode=${ inviterCode }`, {
+            await this.props.post(`/users?verifyCode=${ verifyCode }&inviterCode=${ inviterCode }`, {
                 address,
                 email,
                 password,
                 username,
             })
-            Toast.success('注册成功')
-            console.log(result)
+            Toast.success('注册成功', 2000, () => {
+                this.props.goLogin && this.props.goLogin()
+            })
+            this.isRegister = false
         } catch (error) {
-            Toast.error('注册失败')
-            console.log(error)
+            Toast.error(error || '注册失败')
+            this.isRegister = false
         }
         
     }

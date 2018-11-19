@@ -70,7 +70,15 @@
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "no-undef": "off",
+      "no-restricted-globals": "off",
+      "no-unused-vars": "off",
+      "no-useless-escape": "off",
+      "no-throw-literal": "off",
+      "no-unreachable": "off"
+    }
   },
   "browserslist": [
     ">0.2%",

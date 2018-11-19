@@ -11,7 +11,8 @@ export default class extends Component {
         alert: {
             title: '',
             children: []
-        }
+        },
+        leftText: ''
     }
     
     constructor(props) {
@@ -23,11 +24,19 @@ export default class extends Component {
             tabTitle: props.list[0].tabTitle,
             ThisComponentsName: props.list[0].componentsName,
             isMask: false,
-            alert: props.list[0].alert
+            alert: props.list[0].alert,
+            leftText: props.list[0].leftText,
+            
         }
 
         this.tabBgColor = this.props.tabBgColor || '#2C4182'
         this.cBgColor = this.props.cBgColor || '#5C81F5'
+    }
+
+    componentWillReceiveProps (nextProps) {
+        this.setState({
+            leftText: nextProps.list[0].leftText
+        })
     }
 
     async componentDidMount () {
@@ -38,7 +47,7 @@ export default class extends Component {
         return this.state.tabList.map((item,index)=>{
             return (
                 <li key={item.name} 
-                    onClick={() => this.clickTab(index, item.componentsName, item.tabTitle, item.alert)} 
+                    onClick={() => this.clickTab(index, item.componentsName, item.tabTitle, item.alert, item.leftText)} 
                     className={ this.state.checkNum === index ? 'Accordion_left_li_active' : '' }
                 >
                     { item.name }
@@ -47,12 +56,13 @@ export default class extends Component {
         })
     }
     
-    clickTab (index, componentsName, tabTitle, alert) {
+    clickTab (index, componentsName, tabTitle, alert, leftText) {
         this.setState({
             checkNum: index,
             ThisComponentsName: componentsName,
-            tabTitle: tabTitle,
-            alert: alert
+            tabTitle,
+            alert,
+            leftText
         })
     }
 
@@ -65,7 +75,7 @@ export default class extends Component {
     }
 
     render() {
-        const { ThisComponentsName, tabTitle, alert } = this.state
+        const { ThisComponentsName, tabTitle, alert, checkNum, leftText } = this.state
 
         return (
             <div className="Accordion">
@@ -74,6 +84,7 @@ export default class extends Component {
                 </ul>
                 <div className="Accordion_right" style={ { backgroundColor: this.cBgColor } }>
                     <img className="accordion-common-yiwen" src={ doubt } onClick={ this.showMask.bind(this) } alt="doubt"/>
+                    <div className="accordion-common-left-text">{ checkNum === 0 && leftText }</div>
                     <div className="accordion-common-title">{ tabTitle }</div>
                     <ThisComponentsName user={ this.props.user }></ThisComponentsName>
                 </div>

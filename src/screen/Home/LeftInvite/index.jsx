@@ -3,6 +3,8 @@ import { InputGroup, Input } from 'reactstrap'
 import { connect } from 'react-redux'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
+import { Toast } from '../../../components/index'
+
 import './index.less'
 
 @connect(state => ({
@@ -34,7 +36,7 @@ class LeftInvite extends Component {
                         <p>邀请码</p>
                         <div className="gradient-color">{ this.props.inviterCode }</div>
                     </div>
-                    <CopyToClipboard text={ this.props.inviterCode } onCopy={() => alert('复制成功')}>
+                    <CopyToClipboard text={ this.props.inviterCode } onCopy={() => Toast.success('复制成功')}>
                         <div className="gradient-bg leftBuy-btn">复制</div>
                     </CopyToClipboard>
                 </div>

@@ -4,7 +4,6 @@ import qs from 'qs'
 
 const requestBody = ['POST', 'PUT', 'PATCH']
 const restfulApi = ['GET', 'HEAD', 'POST', 'DELETE', 'PUT', 'PATCH']
-let count = 0
 
 let defaultOptions = {
   headers: {},
@@ -29,44 +28,17 @@ const httpFactory = method => (url, params = {}, axiosOptions, isLoading = true)
 	}
 
 	return new Promise ((resolve, reject) => {
-        const startDate = Date.now()
-		if (count <= 0) {
-            // 打开loading
-			// isLoading && 
-		}
-
-        isLoading && count++
-        
-        console.log(options)
-
 		axios(options)
 		.then(result => {
-            console.log(result.data)
             if (result.status !== 200) {
-                return reject(result.data || '接口错误')
+                return reject(result.data.message || '错误请稍后再试')
             } else {
                 resolve(result.data)
             }
         })
         .catch(e => {
-            console.log('请求失败', e)
-			reject('Server Error', e)
+			reject('错误请稍后再试')
 		})
-        .finally(() => {
-            isLoading && count--
-
-            const poorDate = Date.now() - startDate
-
-			if (count <= 0) {
-				if (poorDate  < 400) {
-                    // 延迟关闭loading
-					// setTimeout(() => global.store.dispatch(loadingClose()) , 400)
-				} else {
-                    // 关闭loading
-					// global.store.dispatch(loadingClose())
-				}
-			}
-        })
 	})
 }
 

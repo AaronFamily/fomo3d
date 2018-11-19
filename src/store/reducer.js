@@ -29,6 +29,8 @@ export default (state = initialState, action) => {
             return { ...state, isLogin: action.payload }
         case Types.SET_TIME:
             return { time: action.payload }
+        case Types.RESET_USER:
+            return initialState
         default:
             return state
     }

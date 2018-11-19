@@ -1,29 +1,39 @@
 import React , {Component} from 'react'
 import { 
-    Modal, ModalHeader, ModalBody,
-    InputGroup, Input 
-} from 'reactstrap';
+    Modal,
+    ModalHeader,
+    ModalBody,
+    InputGroup,
+    Input 
+} from 'reactstrap'
+import { connect } from 'react-redux'
 
 import { Toast } from '../../../../components/index'
-
 import requests from '../../../../utils/requests'
+import { setUserInfo, resetLoginStatus } from '../../../../store/action'
 
 import '../index.less'
 import './index.less'
 
+
+@connect(null, dispatch => ({
+    setUserInfo: data => dispatch(setUserInfo(data)),
+    resetLoginStatus: bool => dispatch(resetLoginStatus(bool))
+}))
 @requests()
 class Login extends Component {
     constructor (props) {
         super (props)
         this.state = {
-            usernameRegular:/^[a-zA-Z0-9_-]{6,20}$/,
-            passwordRegular:/^.*(?=.{6,20})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/,
+            usernameRegular: /^[a-zA-Z0-9_-]{6,20}$/,
+            passwordRegular: /^[a-zA-Z]\w{6,20}$/,
             tip:'',
             modal: props.modal,
             username : '',
             password : ''
         }
-        this.toggle = this.toggle.bind(this);
+        this.toggle = this.toggle.bind(this)
+        this.isOnClick = false
     }
 
     toggle() {
@@ -63,13 +73,16 @@ class Login extends Component {
     }
 
     validation () {
-        const { usernameRegular,passwordRegular,username,password } = this.state
+        if (this.isOnClick) return
+
+        const { usernameRegular, passwordRegular, username, password } = this.state
+
         try {
             if(!usernameRegular.test(username)){
-                throw '用户名格式为：6到20位字符'
+                throw '用户名错误'
             }
             if(!passwordRegular.test(password)){
-                throw '密码格式为：6到20位（至少1个大写字母，1个小写字母，1个数字，1个特殊字符）'
+                throw '密码错误'
             }
         } catch (error) {
             this.setState({
@@ -85,15 +98,27 @@ class Login extends Component {
     async registered () {
         const { username, password } = this.state
 
+        this.isOnClick = true
+
         try {
-            const result = await this.props.post(`/auth/form?username=${ username }&password=${ password }`)
+            await this.props.post(`/auth/form?username=${ username }&password=${ password }`)
             Toast.success('登陆成功')
-            console.log(result)
+            const round = await this.props.get('/sessions/round')
+            const result = await this.props.get('/users')
+			this.props.setUserInfo({
+				...result,
+				...round,
+				isLogin: true
+            })
+            this.setState({
+                modal: false
+            })
         } catch (error) {
-            Toast.error('登陆失败')
-            console.log(error)
+            this.props.resetLoginStatus(false)
+            Toast.error(error || '登陆失败')
         }
-        
+
+        this.isOnClick = false
     }
 
     loginOptClick (type) {

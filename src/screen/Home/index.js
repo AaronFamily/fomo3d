@@ -61,7 +61,8 @@ class Home extends Component {
 						children: [
 							'简单的介绍内容'
 						]
-					}
+					},
+					leftText: ''
 				},
 				{
 					name: '最近购买',
@@ -92,7 +93,7 @@ class Home extends Component {
 	}
 
 	render() {
-		const { tabListLeft,tabListRight } = this.state
+		const { tabListLeft, tabListRight } = this.state
 
 		return (
 			<div className="home">
@@ -116,38 +117,65 @@ class Home extends Component {
 	}
 
 	componentDidMount () {
+		this.getTime()
 		this.getPlatformData()
 		this.getUserInfoData()
 	}
 
 	async getPlatformData () {
 		const rank = await this.props.get('/sessions/rank')
-		const time = await this.props.get('/sessions/time')
 		const statistics = await this.props.get('/sessions/statistics')
 		const recency = await this.props.get('/sessions/recency')
 
-		this.setState({ time, rank })
+		this.setState({ rank })
 
 		this.props.setUserInfo({
 			rank,
-			time,
 			recency,
 			...statistics
+		})
+	}
+
+	async getTime () {
+		const time = await this.props.get('/sessions/time')
+
+		this.setState({ time: Date.now() + time })
+
+		this.props.setUserInfo({
+			time: Date.now() + time
 		})
 	}
 
 	async getUserInfoData () {
 		try {
 			const result = await this.props.get('/users')	
-			const round = await this.props.get('/sessions/round')
 			this.props.setUserInfo({
 				...result,
-				...round,
 				isLogin: true
 			})
+
+			this.getRound()
 		} catch (error) {
 			this.props.resetLoginStatus(false)
 		}
+	}
+
+	async getRound () {
+		try {
+			const round = await this.props.get('/sessions/round')
+
+			const newTabListRight = [...this.state.tabListRight]
+
+			newTabListRight[0].leftText = `第 ${round.lunshu} 轮`
+
+			this.setState({
+				tabListRight: newTabListRight
+			})
+
+			this.props.setUserInfo({
+				...round
+			})
+		} catch (error) {}
 	}
 }
 

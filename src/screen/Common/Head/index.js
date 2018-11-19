@@ -10,7 +10,6 @@ import {
 
 import { Header, Countdown } from '../../../components/index'
 
-import Modals from '../Modals/index'
 import Login from '../Modals/Login/index'
 import Register from '../Modals/Register/index'
 import ForgetPwd from '../Modals/ForgetPwd/index'
@@ -20,6 +19,8 @@ import {
     goldCoinsDeep,
     user
 } from '../../../image/index'
+import requests from '../../../utils/requests'
+import { setUserInfo } from '../../../store/action' 
 import './index.less'
 
 @connect(state => ({
@@ -27,7 +28,10 @@ import './index.less'
     huanlebi: state.huanlebi,
     isLogin: state.isLogin,
     username: state.username
+}),dispatch => ({
+    setUserInfo: data => dispatch(setUserInfo(data))
 }))
+@requests()
 class Head extends Component {
     constructor (props) {
         super (props)
@@ -43,7 +47,7 @@ class Head extends Component {
 
         return (
             <div className="head">
-                <Header title="Fomo3D">
+                <Header title="欢乐夺宝记">
                     <NavItem className="col-md-3 col-lg-3 head-vertical-center head-icon-left">
                         <div className="head-liItem">
                             <img className="g-header-icon head-hourglass" src={ funnel } alt="funnel"/>
@@ -66,7 +70,7 @@ class Head extends Component {
                                     <span>{ username }</span>
                                 </DropdownToggle>
                                 <DropdownMenu>
-                                    <DropdownItem>
+                                    <DropdownItem onClick={ () => this.logOut() }>
                                         退出
                                     </DropdownItem>
                                 </DropdownMenu>
@@ -109,7 +113,7 @@ class Head extends Component {
             case 'Login':
                 return <Login modal={ ModalsIsShow } goForget={ this.goForget.bind(this) } goRegister={ this.goRegister.bind(this) }></Login>
             case 'ModalRegister':
-                return <Register modal={ ModalsIsShow }></Register>
+                return <Register modal={ ModalsIsShow } goLogin={ this.goLogin.bind(this) }></Register>
             case 'Forget':
                 return <ForgetPwd modal={ ModalsIsShow }></ForgetPwd>
             default:
@@ -131,11 +135,36 @@ class Head extends Component {
         })
     }
 
+    goLogin () {
+        this.setState({
+            loginOrRegister : 'Login',
+            ModalsIsShow : true
+        })
+    }
+
     showModel (type) {
         this.setState({
             loginOrRegister : type,
             ModalsIsShow : true
         })
+    }
+
+    async logOut () {
+        this.props.setUserInfo({
+            address: '',
+            email: '',
+            friend1: 0,
+            friend2: 0,
+            huanlebi: 0,
+            id: 0,
+            inviterCode: '',
+            inviterId: 0,
+            isLogin: false,
+            jiangchi: 0,
+            lunshu: 0,
+            username: ''
+        })
+        await this.props.get('/auth/logout')
     }
 }
 

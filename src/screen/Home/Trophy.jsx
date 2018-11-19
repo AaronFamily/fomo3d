@@ -16,7 +16,7 @@ export default (props) => <div>
                 <span>{ props.rank[0] }</span>
             </li>
             <li className="trophy-right">
-                <img src={ thirdPrize } alt="The third prize"/>
+                <img src={ secondPrize } alt="The third prize"/>
                 <span className="trophy-thirdPrize">{ props.rank[2] }</span>
             </li>
         </ul>
@@ -32,7 +32,7 @@ export default (props) => <div>
                 <span>{ props.rank[0] }</span>
             </li>
             <li>
-                <img src={ thirdPrize } alt="The third prize"/>
+                <img src={ secondPrize } alt="The third prize"/>
                 <span className="trophy-thirdPrize">{ props.rank[2] }</span>
             </li>
         </ul>

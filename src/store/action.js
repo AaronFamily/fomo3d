@@ -14,3 +14,7 @@ export const setTime = payload => ({
     type: Types.SET_TIME,
     payload
 })
+
+export const resetUser = () => ({
+    type: Types.RESET_USER
+})
