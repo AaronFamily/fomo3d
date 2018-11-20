@@ -12,6 +12,7 @@ class Countdown extends Component {
         super (props)
         this.state = {
             endTime : props.endTime,
+            days:0,
             hours : 0,
             minutes : 0,
             seconds : 0,
@@ -23,13 +24,14 @@ class Countdown extends Component {
     }
 
     render (){
-        const { hours, minutes, seconds, fontSize, special } = this.state
+        const { days,hours, minutes, seconds, fontSize, special } = this.state
 
         return (
             <div className="countdown" style={{ fontSize: fontSize }}>
                 <div className={ `countdown_box ${special ? 'gradient-color' : 'no-strong'}` }>
-                    <span>{ hours <10 && '0' }{ hours }</span><strong> : </strong>
-                    <span>{ minutes <10 && '0' }{ minutes }</span><strong> : </strong>
+                    <span>{ days }&nbsp;天&nbsp;</span>
+                    <span>{ hours <10 && '0' }{ hours }</span><strong>&nbsp;:&nbsp;</strong>
+                    <span>{ minutes <10 && '0' }{ minutes }</span><strong>&nbsp;:&nbsp;</strong>
                     <span>{ seconds <10 && '0' }{ seconds }</span>
                 </div>
             </div>
@@ -56,6 +58,7 @@ class Countdown extends Component {
         let endDate = new Date(this.state.endTime)
         let nowDate = new Date()
         let totalSeconds = parseInt((endDate - nowDate) / 1000)
+        var days = Math.floor(totalSeconds / (60 * 60 * 24));
         let modulo = totalSeconds % (60 * 60 * 24)
         let hours = Math.floor(modulo / (60 * 60))
 
@@ -65,6 +68,7 @@ class Countdown extends Component {
         let seconds = modulo % 60
         
         this.setState({
+            days:days,
             hours : hours,
             minutes : minutes,
             seconds : seconds
