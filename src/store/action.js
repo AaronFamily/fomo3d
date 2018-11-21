@@ -18,3 +18,8 @@ export const setTime = payload => ({
 export const resetUser = () => ({
     type: Types.RESET_USER
 })
+
+export const toggleLanguage = payload => ({
+    type: Types.SET_LANG,
+    payload
+})

@@ -9,6 +9,8 @@ import RightBuy from './RightBuy/index'
 import RightRound from './RightRound/index'
 import RightStatistical from './RightStatistical/index'
 
+import { FormattedMessage, injectIntl } from 'react-intl'
+
 import Trophy from './Trophy'
 import { setUserInfo, setTime, resetLoginStatus } from '../../store/action'
 
@@ -16,7 +18,10 @@ import requests from '../../utils/requests'
 
 import './index.less'
 
-@connect(null, dispatch => ({
+@injectIntl
+@connect(state => ({
+	isBox: state.language !== 'zh'
+}), dispatch => ({
 	setUserInfo: data => dispatch(setUserInfo(data)),
 	setTime: time => dispatch(setTime(time)),
 	resetLoginStatus: bool => dispatch(resetLoginStatus(bool))
@@ -25,72 +30,80 @@ import './index.less'
 class Home extends Component {
 	constructor(props) {
 		super(props)
-
 		this.state = {
 			tabListLeft : [
 				{
-					name: '购买',
-					tabTitle: '购买欢乐币',
+					name: <FormattedMessage id="buy"/>,
+					tabTitle: <FormattedMessage id="buyingCoins"/>,
 					componentsName: LeftBuy,
 					alert: {
-						title: '展示性弹框',
+						title: <FormattedMessage id="buy"/>,
 						children: [
-							'简单的介绍内容'
+							<FormattedMessage id="buyContent"/>
 						]
 					}
 				},
 				{
-					name: '邀请',
-					tabTitle: '邀请',
+					name: <FormattedMessage id="invite"/>,
+					tabTitle: <FormattedMessage id="invite"/>,
 					componentsName: LeftInvite,
 					alert: {
-						title: '展示性弹框',
+						title: <FormattedMessage id="invite"/>,
 						children: [
-							'简单的介绍内容'
+							<FormattedMessage id="inviteContent"/>
 						]
 					}
 				},
 			],
 			tabListRight : [
 				{
-					name: '回合',
-					tabTitle: '购买截止',
+					name: <FormattedMessage id="round"/>,
+					tabTitle: this._intl(['first', 0, 'round']),
 					componentsName: RightRound,
 					alert: {
-						title: '展示性弹框',
+						title: <FormattedMessage id="round"/>,
 						children: [
-							'简单的介绍内容'
+							<FormattedMessage id="roundContent"/>
 						]
-					},
-					leftText: ''
+					}
 				},
 				{
-					name: '最近购买',
-					tabTitle: '最近购买',
+					name: <FormattedMessage id="recent"/>,
+					tabTitle: <FormattedMessage id="recent"/>,
 					componentsName: RightBuy,
 					alert: {
-						title: '展示性弹框',
+						title: <FormattedMessage id="recent"/>,
 						children: [
-							'简单的介绍内容'
+							<FormattedMessage id="RecentlyBuyContent"/>
 						]
 					}
 				},
 				{ 
-					name: '统计',
-					tabTitle: '统计',
-					componentsName :RightStatistical,
+					name: <FormattedMessage id="stats"/>,
+					tabTitle: <FormattedMessage id="stats"/>,
+					componentsName: RightStatistical,
 					alert: {
-						title: '展示性弹框',
+						title: <FormattedMessage id="stats"/>,
 						children: [
-							'简单的介绍内容'
+							<FormattedMessage id="statisticalContent"/>
 						]
 					}
 				}
 			],
 			time: 0,
-			rank: ["???", "???", "???"]
+			rank: ['', '', '']
 		}
 	}
+
+	_intl (ids) {
+		return ids.map(id => {
+			if (typeof id === 'number') {
+				return id
+			}
+
+			return this.props.intl.formatMessage({ id })
+		})
+    }
 
 	render() {
 		const { tabListLeft, tabListRight } = this.state
@@ -99,16 +112,16 @@ class Home extends Component {
 			<div className="home">
 				<div className="main">
 					<div className="title">
-						<img className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" src={ title } alt=""/>
+						<img className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" src={ this.props.intl.formatMessage({ id: 'banner' }) } alt="title"/>
 					</div>
 					<Countdown endTime={ this.state.time } fontSize='22px'/>
 					<Trophy rank={ this.state.rank }/>
 					<div className="accordion-box">
 						<div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 inline-block">
-							<Accordion list={ tabListLeft } />
+							<Accordion isBox={ this.props.isBox } list={ tabListLeft } />
 						</div>
 						<div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 inline-block">
-							<Accordion list={ tabListRight } tabBgColor="#41338B" cBgColor="#614DD0"/>
+							<Accordion isBox={ this.props.isBox } list={ tabListRight } tabBgColor="#41338B" cBgColor="#614DD0"/>
 						</div>
 					</div>
 				</div>
@@ -166,7 +179,7 @@ class Home extends Component {
 
 			const newTabListRight = [...this.state.tabListRight]
 
-			newTabListRight[0].leftText = `第 ${round.lunshu} 轮`
+			newTabListRight[0].tabTitle = this._intl(['first', parseInt(round.lunshu || 0), 'round'])
 
 			this.setState({
 				tabListRight: newTabListRight

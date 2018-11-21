@@ -46,11 +46,11 @@ export default class extends Component {
     _eachTabList () {
         return this.state.tabList.map((item,index)=>{
             return (
-                <li key={item.name} 
+                <li key={ index } 
                     onClick={() => this.clickTab(index, item.componentsName, item.tabTitle, item.alert, item.leftText)} 
                     className={ this.state.checkNum === index ? 'Accordion_left_li_active' : '' }
                 >
-                    { item.name }
+                    <div className={ this.props.isBox ? 'open-text' : '' }>{ item.name }</div>
                 </li>
             )
         })

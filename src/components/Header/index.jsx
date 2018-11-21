@@ -32,7 +32,7 @@ export default class extends Component {
 
     render() {
         return <Navbar className="navbar navbar-fixed navbar-transparent navbar-dark header-navbar" expand="md">
-            <NavbarBrand className="text-white pr-3">{ this.props.title }</NavbarBrand>
+            <NavbarBrand className="text-white">{ this.props.title }</NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="col-lg-12 col-md-12 text-white" navbar>

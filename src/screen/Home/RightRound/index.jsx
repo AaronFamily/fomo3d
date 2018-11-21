@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { FormattedMessage } from 'react-intl'
 
 import { eth, goldCoins } from '../../../image/index'
 import './index.less'
 
 @connect(state => ({
     jiangchi: state.jiangchi,
-    huanlebi: state.huanlebi
+    huanlebi: state.huanlebi,
+    isBox: state.language !== 'zh'
 }))
 class RightRound extends Component {
     render() {
@@ -16,7 +18,7 @@ class RightRound extends Component {
                     <li className="rightRound-ul-li">
                         <div className="rightRound-ul-li-left">
                             <img src={eth} alt="eth"/>
-                            <span>奖池：</span>
+                            <span><FormattedMessage id="jackpot"/>：</span>
                         </div>
                         <div className="rightRound-ul-li-right">
                             <div className="gradient-color">{ this.props.jiangchi }</div>
@@ -25,7 +27,7 @@ class RightRound extends Component {
                     <li className="rightRound-ul-li">
                         <div className="rightRound-ul-li-left">
                             <img src={goldCoins} alt="goldCoins"/>
-                            <span>你的欢乐币：</span>
+                            <span><FormattedMessage id="yourCoin"/>：</span>
                         </div>
                         <div className="rightRound-ul-li-right">
                             <div className="gradient-color">{ this.props.huanlebi }</div>

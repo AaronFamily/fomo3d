@@ -8,6 +8,8 @@ import {
     DropdownItem
 } from 'reactstrap'
 
+import { FormattedMessage } from 'react-intl'
+
 import { Header, Countdown } from '../../../components/index'
 
 import Login from '../Modals/Login/index'
@@ -20,24 +22,26 @@ import {
     user
 } from '../../../image/index'
 import requests from '../../../utils/requests'
-import { setUserInfo } from '../../../store/action' 
+import { setUserInfo, toggleLanguage } from '../../../store/action' 
 import './index.less'
 
 @connect(state => ({
     time: state.time,
     huanlebi: state.huanlebi,
     isLogin: state.isLogin,
-    username: state.username
+    username: state.username,
+    language: state.language
 }),dispatch => ({
-    setUserInfo: data => dispatch(setUserInfo(data))
+    setUserInfo: data => dispatch(setUserInfo(data)),
+    toggleLanguage: lang => dispatch(toggleLanguage(lang)),
 }))
 @requests()
 class Head extends Component {
     constructor (props) {
         super (props)
         this.state = {
-            loginOrRegister : 'Login',
-            ModalsIsShow : false
+            loginOrRegister: 'Login',
+            ModalsIsShow: false
         }
 
     }
@@ -45,22 +49,36 @@ class Head extends Component {
     render (){
         const { time, huanlebi, isLogin, username } = this.props
 
+        const isZh = this.props.language === 'zh'
+
         return (
             <div className="head">
-                <Header title="欢乐夺宝记">
+                <Header title={
+                    <FormattedMessage id='title'/>
+                }>
                     <NavItem className="col-md-3 col-lg-3 head-vertical-center head-icon-left">
                         <div className="head-liItem">
                             <img className="g-header-icon head-hourglass" src={ funnel } alt="funnel"/>
                             <Countdown endTime={ time } special={ false } fontSize='14px' />
                         </div>
                     </NavItem>
-                    <NavItem className="col-md-3 col-lg-3 head-vertical-center head-icon-left">
+                    {/* 
+                        欢乐币数量注释：
+                        如需显示欢乐币数目，首先将下面注释去掉，并将<NavItem className="col-md-5 col-lg-5"></NavItem>这个行代码进行注释即可
+                     */}
+                    {/* <NavItem className="col-md-3 col-lg-3 head-vertical-center head-icon-left">
                         <div className="middle head-vertical-center">
                             <img className="g-header-icon" src={ goldCoinsDeep } alt="goldCoinsDeep"/>
                             <span>{ huanlebi }</span>
                         </div>
                     </NavItem>
-                    <NavItem className="col-md-2 col-lg-2"></NavItem>
+                    <NavItem className="col-md-2 col-lg-2"></NavItem> */}
+
+                    {/* 显示欢乐币后需注释这样到吗 */}
+                    <NavItem className="col-md-5 col-lg-5"></NavItem>
+                    
+                    {/* 以上注释为欢乐币显示隐藏说明 */}
+
                     {
                         isLogin ?
                         <UncontrolledDropdown nav inNavbar className="col-md-3 col-lg-3 head-vertical-center">
@@ -71,7 +89,7 @@ class Head extends Component {
                                 </DropdownToggle>
                                 <DropdownMenu>
                                     <DropdownItem onClick={ () => this.logOut() }>
-                                        退出
+                                        <FormattedMessage id='logOut'/>
                                     </DropdownItem>
                                 </DropdownMenu>
                             </div>
@@ -81,23 +99,18 @@ class Head extends Component {
                             <div className="head-flex-row pull-right">
                                 <img className="g-header-icon head-user-icon" src={ user } alt="user"/>
                                 <div className="head-user-text login-register">
-                                    <div onClick={()=>this.showModel('Login')} className="header-active-login">登录</div>
-                                    <div onClick={()=>this.showModel('ModalRegister')}>注册</div>
+                                    <div className={isZh ? '' : 'small-padding'} onClick={()=>this.showModel('Login')} className="header-active-login">
+                                        <FormattedMessage id='login'/>
+                                    </div>
+                                    <div className={isZh ? '' : 'small-padding'} onClick={()=>this.showModel('ModalRegister')}>
+                                        <FormattedMessage id='register'/>
+                                    </div>
                                 </div>
                             </div>
                         </NavItem>
                     }
                     <UncontrolledDropdown nav inNavbar className="col-md-1 col-lg-1 pull-right head-vertical-center">
-                        <div>
-                            <DropdownToggle nav>
-                                ZH V
-                            </DropdownToggle>
-                            <DropdownMenu>
-                                <DropdownItem>
-                                    ZH
-                                </DropdownItem>
-                            </DropdownMenu>
-                        </div>
+                        <div className="lang-btn" onClick={ this.toggleLang.bind(this) }>{ isZh ? '切换英文' : 'Chinese' }</div>
                     </UncontrolledDropdown>
                 </Header>
                 {
@@ -109,16 +122,32 @@ class Head extends Component {
 
     _toogleModal () {
         const { ModalsIsShow } = this.state
+
         switch (this.state.loginOrRegister) {
             case 'Login':
-                return <Login modal={ ModalsIsShow } goForget={ this.goForget.bind(this) } goRegister={ this.goRegister.bind(this) }></Login>
+                return <Login modal={ ModalsIsShow } goForget={ this.goForget.bind(this) } goRegister={ this.goRegister.bind(this) } close={ this.close.bind(this) }></Login>
             case 'ModalRegister':
-                return <Register modal={ ModalsIsShow } goLogin={ this.goLogin.bind(this) }></Register>
+                return <Register modal={ ModalsIsShow } goLogin={ this.goLogin.bind(this) } close={ this.close.bind(this)}></Register>
             case 'Forget':
-                return <ForgetPwd modal={ ModalsIsShow }></ForgetPwd>
+                return <ForgetPwd modal={ ModalsIsShow } close={ this.close.bind(this)}></ForgetPwd>
             default:
-                return <Login modal={ ModalsIsShow } goForget={ this.goForget.bind(this) } goRegister={ this.goRegister.bind(this) }></Login>
+                return null
         }
+    }
+
+    close () {
+        this.setState({
+            loginOrRegister: 'Login',
+            ModalsIsShow: false
+        })
+    }
+
+    toggleLang () {
+        let lang = this.props.language
+
+        lang = lang === 'zh' ? 'en' : 'zh'
+
+        this.props.toggleLanguage(lang)
     }
 
     goRegister () {
@@ -150,6 +179,7 @@ class Head extends Component {
     }
 
     async logOut () {
+        sessionStorage.clear()
         this.props.setUserInfo({
             address: '',
             email: '',

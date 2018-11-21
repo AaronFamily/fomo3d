@@ -50,6 +50,7 @@
     "react-copy-to-clipboard": "^5.0.1",
     "react-dev-utils": "^6.1.1",
     "react-dom": "^16.6.0",
+    "react-intl": "^2.7.2",
     "react-loadable": "^5.5.0",
     "react-redux": "^5.1.1",
     "reactstrap": "^6.5.0",
@@ -153,5 +154,5 @@
     "less-loader": "^4.1.0",
     "react-hot-loader": "^4.3.12"
   },
-  "proxy": "http://124.126.5.217:8091"
+  "proxy": "http://124.126.4.182:8091"
 }

@@ -7,6 +7,7 @@ import {
     Input 
 } from 'reactstrap'
 import { connect } from 'react-redux'
+import { FormattedMessage, injectIntl } from 'react-intl'
 
 import { Toast } from '../../../../components/index'
 import requests from '../../../../utils/requests'
@@ -15,8 +16,10 @@ import { setUserInfo, resetLoginStatus } from '../../../../store/action'
 import '../index.less'
 import './index.less'
 
-
-@connect(null, dispatch => ({
+@injectIntl
+@connect(state => ({
+    lang: state.language
+}), dispatch => ({
     setUserInfo: data => dispatch(setUserInfo(data)),
     resetLoginStatus: bool => dispatch(resetLoginStatus(bool))
 }))
@@ -38,8 +41,14 @@ class Login extends Component {
 
     toggle() {
         this.setState({
-            modal: !this.state.modal
+            modal: false
+        }, () => {
+            this.props.close && this.props.close()
         })
+    }
+
+    _intl (id) {
+        return this.props.intl.formatMessage({ id })
     }
 
     render (){
@@ -47,29 +56,29 @@ class Login extends Component {
         return (
             <div className="login">
                 <Modal isOpen={this.state.modal} toggle={this.toggle} className={`${this.props.className} login-modal`}>
-                    <ModalHeader toggle={this.toggle}>登录</ModalHeader>
+                    <ModalHeader toggle={this.toggle}><FormattedMessage id="login"/></ModalHeader>
                     <ModalBody>
                         <div className="login-tip">{tip}</div>
                         <InputGroup>
-                            <Input value={ username } onChange={ e => this.changeState('username', e.target.value) } placeholder="请输入用户名" />
+                            <Input value={ username } onChange={ e => this.changeState('username', e.target.value) } placeholder={ this._intl('username') } />
                         </InputGroup>
                         <InputGroup>
-                            <Input value={ password } onChange={ e => this.changeState('password', e.target.value) } type="password" placeholder="请输入密码" />
+                            <Input value={ password } onChange={ e => this.changeState('password', e.target.value) } type="password" placeholder={ this._intl('pwd') } />
                         </InputGroup>
                         <div className="login-opt">
-                            <span onClick={()=> this.loginOptClick('forget')} className="login-opt-forget">忘记密码</span>
+                            <span onClick={()=> this.loginOptClick('forget')} className="login-opt-forget"><FormattedMessage id="forgotPwd"/></span>
                             <span className="login-opt-symbol">|</span>
-                            <span onClick={()=> this.loginOptClick('register')} className="login-opt-register">注册新账号</span>
+                            <span onClick={()=> this.loginOptClick('register')} className="login-opt-register"><FormattedMessage id="register"/></span>
                         </div>
                     </ModalBody>
-                    <div onClick={ this.validation.bind(this) } className="gradient-bg submit-btn">立即登陆</div>
+                    <div onClick={ this.validation.bind(this) } className="gradient-bg submit-btn"><FormattedMessage id="loginNow"/></div>
                 </Modal>
             </div>
         )
     }
 
     changeState (key, value) {
-        this.setState({ [key]: value })
+        this.setState({ [key]: value, tip: '' })
     }
 
     validation () {
@@ -79,10 +88,10 @@ class Login extends Component {
 
         try {
             if(!usernameRegular.test(username)){
-                throw '用户名错误'
+                throw this._intl('errorName')
             }
             if(!passwordRegular.test(password)){
-                throw '密码错误'
+                throw this._intl('errorPwd')
             }
         } catch (error) {
             this.setState({
@@ -90,9 +99,8 @@ class Login extends Component {
             })
             return false
         }
-        this.setState({
-            tip : ''
-        },()=>this.registered())
+        
+        this.registered()
     }
 
     async registered () {
@@ -101,10 +109,11 @@ class Login extends Component {
         this.isOnClick = true
 
         try {
-            await this.props.post(`/auth/form?username=${ username }&password=${ password }`)
-            Toast.success('登陆成功')
+            await this.props.post(`/auth/form?username=${ username }&password=${ password }&language=`)
+            Toast.success(this._intl('sucLogin'))
             const round = await this.props.get('/sessions/round')
             const result = await this.props.get('/users')
+            sessionStorage.setItem('username', result.username)
 			this.props.setUserInfo({
 				...result,
 				...round,
@@ -115,7 +124,7 @@ class Login extends Component {
             })
         } catch (error) {
             this.props.resetLoginStatus(false)
-            Toast.error(error || '登陆失败')
+            Toast.error(error || this._intl('failLogin'))
         }
 
         this.isOnClick = false

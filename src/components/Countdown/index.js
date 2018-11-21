@@ -1,4 +1,5 @@
 import React , { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
 
 import './index.less'
 
@@ -29,8 +30,8 @@ class Countdown extends Component {
         return (
             <div className="countdown" style={{ fontSize: fontSize }}>
                 <div className={ `countdown_box ${special ? 'gradient-color' : 'no-strong'}` }>
-                    <span>{ days }&nbsp;天&nbsp;</span>
-                    <span>{ hours <10 && '0' }{ hours }</span><strong>&nbsp;:&nbsp;</strong>
+                    <span>{ days }&nbsp;</span><FormattedMessage id="day"/>
+                    <span>&nbsp;{ hours <10 && '0' }{ hours }</span><strong>&nbsp;:&nbsp;</strong>
                     <span>{ minutes <10 && '0' }{ minutes }</span><strong>&nbsp;:&nbsp;</strong>
                     <span>{ seconds <10 && '0' }{ seconds }</span>
                 </div>
@@ -43,6 +44,7 @@ class Countdown extends Component {
     }
 
     componentWillReceiveProps (nextProps) {
+        clearTimeout(this.timeOut)
         this.setState({
             endTime: nextProps.endTime
         }, () => this.timeDown())

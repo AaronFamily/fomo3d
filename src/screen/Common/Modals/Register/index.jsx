@@ -1,8 +1,10 @@
-import React , {Component} from 'react'
+import React , { Component } from 'react'
 import { 
     Button, Modal, ModalHeader, ModalBody,
     InputGroup, InputGroupAddon, Input ,
 } from 'reactstrap'
+import { connect } from 'react-redux'
+import { FormattedMessage, injectIntl } from 'react-intl'
 
 import { Toast } from '../../../../components/index'
 
@@ -11,6 +13,10 @@ import requests from '../../../../utils/requests'
 import '../index.less'
 import './index.less'
 
+@injectIntl
+@connect(state => ({
+    lang: state.language
+}))
 @requests()
 class Register extends Component {
     constructor (props) {
@@ -40,8 +46,14 @@ class Register extends Component {
 
     toggle() {
         this.setState({
-            modal: !this.state.modal
+            modal: false
+        }, () => {
+            this.props.close && this.props.close()
         })
+    }
+
+    _intl (id) {
+        return this.props.intl.formatMessage({ id })
     }
 
     render (){
@@ -50,35 +62,35 @@ class Register extends Component {
         return (
             <div className="register">
                 <Modal isOpen={this.state.modal} toggle={this.toggle} className={`${this.props.className} register`}>
-                    <ModalHeader toggle={this.toggle}>注册</ModalHeader>
+                    <ModalHeader toggle={this.toggle}><FormattedMessage id="register"/></ModalHeader>
                     <ModalBody>
                         <div className="login-tip">{tip}</div>
                         <InputGroup>
-                            <Input value={ address } onChange={ e => this.changeState('address', e.target.value) } placeholder="请输入钱包地址" />
+                            <Input value={ address } onChange={ e => this.changeState('address', e.target.value) } placeholder={ this._intl('eth') } />
                         </InputGroup>
                         <InputGroup>
-                            <Input value={ username } onChange={ e => this.changeState('username', e.target.value) } placeholder="请输入用户名" />
+                            <Input value={ username } onChange={ e => this.changeState('username', e.target.value) } placeholder={ this._intl('username') } />
                         </InputGroup>
                         <InputGroup>
-                            <Input value={ password } onChange={ e => this.changeState('password', e.target.value) } type="password" placeholder="请输入密码" />
+                            <Input value={ password } onChange={ e => this.changeState('password', e.target.value) } type="password" placeholder={ this._intl('pwd') } />
                         </InputGroup>
                         <InputGroup>
-                            <Input value={ email } onChange={ e => this.changeState('email', e.target.value) } placeholder="请输入邮箱" />
+                            <Input value={ email } onChange={ e => this.changeState('email', e.target.value) } placeholder={ this._intl('email') } />
                         </InputGroup>
                         <InputGroup>
-                            <Input value={ verifyCode } onChange={ e => this.changeState('verifyCode', e.target.value) } placeholder="请输入验证码"/>
+                            <Input value={ verifyCode } onChange={ e => this.changeState('verifyCode', e.target.value) } placeholder={ this._intl('vCode') }/>
                             <InputGroupAddon addonType="prepend" style={{width:'110px'}}>
                                 {
                                     this.state.verifyTime>0 ?
                                     <div className="verifyTime">{this.state.verifyTime}s</div> :
-                                    <Button onClick={ e => this.obtainCode(e) }>获取验证码</Button>
+                                    <Button onClick={ e => this.obtainCode(e) }><FormattedMessage id="getCode"/></Button>
                                 }
                             </InputGroupAddon>
                         </InputGroup>
                         <InputGroup>
-                            <Input value={ inviterCode } onChange={ e => this.changeState('inviterCode', e.target.value) } placeholder="请输入邀请码" />
+                            <Input value={ inviterCode } onChange={ e => this.changeState('inviterCode', e.target.value) } placeholder={ this._intl('iCode') } />
                         </InputGroup>
-                        <div onClick={this.validation.bind(this)} className="gradient-bg submit-btn">立即注册</div>
+                        <div onClick={this.validation.bind(this)} className="gradient-bg submit-btn"><FormattedMessage id="registerNow"/></div>
                     </ModalBody>
                 </Modal>
             </div>
@@ -86,17 +98,20 @@ class Register extends Component {
     }
 
     changeState (key, value) {
-        this.setState({ [key]: value })
+        this.setState({ [key]: value, tip: '' })
     }
 
     async obtainCode () {
         if (this.isFireCode) return
 
-        const { emailRegularRegular, email } = this.state
+        const { emailRegularRegular, usernameRegular, email, username } = this.state
 
         try {
+            if(!usernameRegular.test(username)){
+                throw this._intl('usernameRole')
+            }
             if(!emailRegularRegular.test(email)){
-                throw '请输入正确格式的邮箱'
+                throw this._intl('emailRule')
             }
         } catch (error) {
             this.setState({
@@ -105,10 +120,8 @@ class Register extends Component {
             return false
         }
         try {
-            
             this.isFireCode = true
-
-            await this.props.post(`/auth/verify_code?email=${ email }`)
+            await this.props.post(`/auth/verify_code?email=${ email }&username=${ username }`)
             let seconds = 60
             
             this.timeOut = setInterval( () => {
@@ -119,9 +132,9 @@ class Register extends Component {
                 seconds--
                 this.setState({ verifyTime : seconds })
             }, 1000)
-            Toast.success('验证码已发送请注意查收')
+            Toast.success(this._intl('sucSendCode'))
         } catch (error) {
-            Toast.error(error || '发送失败，请稍后再试')
+            Toast.error(error || this._intl('failSend'))
             this.isFireCode = false
         }
     }
@@ -145,22 +158,22 @@ class Register extends Component {
 
         try {
             if(!/^(0x)?[0-9a-f]{40}$/i.test(address)){
-                throw '请输入正确有效的钱包地址'
+                throw this._intl('ethAddressRule')
             }
             if(!usernameRegular.test(username)){
-                throw '用户名格式为：6到20位字符'
+                throw this._intl('usernameRole')
             }
             if(!passwordRegular.test(password)){
-                throw '密码格式为：以字母开头，长度在6~20 之间，只能包含字符、数字和下划线'
+                throw this._intl('pwdRole')
             }
             if(!emailRegularRegular.test(email)){
-                throw '请输入正确格式的邮箱'
+                throw this._intl('emailRule')
             }
             if(!verifyCodeRegular.test(verifyCode)){
-                throw '请输入正确格式验证码'
+                throw this._intl('codeRole')
             }
             if(inviterCode && !inviterCodeRegular.test(inviterCode)){
-                throw '请输入正确有效的邀请码'
+                throw this._intl('inviteCodeRole')
             }
         } catch (error) {
             this.setState({
@@ -168,9 +181,8 @@ class Register extends Component {
             })
             return false
         }
-        this.setState({
-            tip : ''
-        },()=>this.registered())
+        
+        this.registered()
     }
 
     async registered () {
@@ -184,12 +196,12 @@ class Register extends Component {
                 password,
                 username,
             })
-            Toast.success('注册成功', 2000, () => {
+            Toast.success(this._intl('sucRegister'), 2000, () => {
                 this.props.goLogin && this.props.goLogin()
             })
             this.isRegister = false
         } catch (error) {
-            Toast.error(error || '注册失败')
+            Toast.error(error || this._intl('failRegister'))
             this.isRegister = false
         }
         

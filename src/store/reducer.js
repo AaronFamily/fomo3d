@@ -14,11 +14,12 @@ const initialState = {
     isLogin: true,
     jiangchi: 0,
     lunshu: 0,
-    rank: ['???', '???', '???'],
+    rank: ['', '', ''],
     recency: [],
     time: 0,
-    username: '',
-    zongtouzi: 0
+    username: sessionStorage.getItem('username') || '',
+    zongtouzi: 0,
+    language: navigator.language.split('-')[0] || 'zh'
 }
 
 export default (state = initialState, action) => {
@@ -31,6 +32,8 @@ export default (state = initialState, action) => {
             return { time: action.payload }
         case Types.RESET_USER:
             return initialState
+        case Types.SET_LANG:
+            return { ...state, language: action.payload }
         default:
             return state
     }

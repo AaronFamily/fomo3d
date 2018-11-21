@@ -2,7 +2,9 @@ import React , {Component} from 'react'
 import { 
     Modal, ModalHeader, ModalBody, Button,
     InputGroup, Input ,InputGroupAddon
-} from 'reactstrap';
+} from 'reactstrap'
+import { connect } from 'react-redux'
+import { FormattedMessage, injectIntl } from 'react-intl'
 
 import { Toast } from '../../../../components/index'
 
@@ -11,6 +13,10 @@ import requests from '../../../../utils/requests'
 import '../index.less'
 import './index.less'
 
+@injectIntl
+@connect(state => ({
+    lang: state.language
+}))
 @requests()
 class ForgetPwd extends Component {
     constructor (props) {
@@ -27,13 +33,19 @@ class ForgetPwd extends Component {
             passwordAgain : '',
             verifyTime:0
         }
-        this.toggle = this.toggle.bind(this);
+        this.toggle = this.toggle.bind(this)
     }
 
     toggle() {
         this.setState({
-            modal: !this.state.modal
+            modal: false
+        }, () => {
+            this.props.close && this.props.close()
         })
+    }
+
+    _intl (id) {
+        return this.props.intl.formatMessage({ id })
     }
 
     render (){
@@ -41,30 +53,30 @@ class ForgetPwd extends Component {
         return (
             <div className="login">
                 <Modal isOpen={this.state.modal} toggle={this.toggle} className={`${this.props.className} login-modal`}>
-                    <ModalHeader toggle={this.toggle}>忘记密码</ModalHeader>
+                    <ModalHeader toggle={this.toggle}><FormattedMessage id="forgotPwd"/></ModalHeader>
                     <ModalBody>
                         <div className="login-tip">{tip}</div>
                         <InputGroup>
-                            <Input value={ username } onChange={ e => this.changeState('username', e.target.value) } type="text" placeholder="请输入用户名" />
+                            <Input value={ username } onChange={ e => this.changeState('username', e.target.value) } type="text" placeholder={ this._intl('userName') } />
                         </InputGroup>
                         <InputGroup>
-                            <Input value={ verifyCode } onChange={ e => this.changeState('verifyCode', e.target.value) } placeholder="请输入验证码"/>
+                            <Input value={ verifyCode } onChange={ e => this.changeState('verifyCode', e.target.value) } placeholder={ this._intl('vCode') }/>
                             <InputGroupAddon addonType="prepend" style={{width:'110px'}}>
                                 {
                                     verifyTime>0 ?
                                     <div className="verifyTime">{verifyTime}s</div> :
-                                    <Button onClick={ e => this.obtainCode(e) }>获取验证码</Button>
+                                    <Button onClick={ e => this.obtainCode(e) }><FormattedMessage id="getCode"/></Button>
                                 }
                             </InputGroupAddon>
                         </InputGroup>
                         <InputGroup>
-                            <Input value={ password } onChange={ e => this.changeState('password', e.target.value) } type="password" placeholder="请输入新密码" />
+                            <Input value={ password } onChange={ e => this.changeState('password', e.target.value) } type="password" placeholder={ this._intl('newPwd') } />
                         </InputGroup>
                         <InputGroup>
-                            <Input value={ passwordAgain } onChange={ e => this.changeState('passwordAgain', e.target.value) } type="password" placeholder="请确认新密码" />
+                            <Input value={ passwordAgain } onChange={ e => this.changeState('passwordAgain', e.target.value) } type="password" placeholder={ this._intl('confirmPwd') } />
                         </InputGroup>
                     </ModalBody>
-                    <div onClick={ this.validation.bind(this) } className="gradient-bg submit-btn">确认修改</div>
+                    <div onClick={ this.validation.bind(this) } className="gradient-bg submit-btn"><FormattedMessage id="ok"/></div>
                 </Modal>
             </div>
         )
@@ -72,23 +84,22 @@ class ForgetPwd extends Component {
 
     async obtainCode () {
         const {usernameRegular,username} = this.state
+
         try {
             if(!usernameRegular.test(username)){
-                throw '用户名格式为：6到20位字符'
+                throw this._intl('usernameRole')
             }
         } catch (error) {
             this.setState({
                 tip : error
             })
+
             return false
-            this.setState({
-                tip : ''
-            })
         }
         
         try {
-            
             await this.props.post(`/auth/verify_code?username=${ username }`)
+            
             let seconds = 60
             
             this.timeOut = setInterval( () => {
@@ -99,28 +110,27 @@ class ForgetPwd extends Component {
                 this.setState({ verifyTime : seconds })
             }, 1000)
 
-            Toast.success('验证码已发送请注意查收')
+            Toast.success(this._intl('sucSendCode'))
         } catch (error) {
-            Toast.error('发送失败，请稍后再试')
-            console.log(error)
+            Toast.error(this._intl(error || 'failSend'))
         }
     }
 
     changeState (key, value) {
-        this.setState({ [key]: value })
+        this.setState({ [key]: value, tip: '' })
     }
 
     validation () {
         const { usernameRegular,passwordRegular,username,password,passwordAgain } = this.state
         try {
             if(!usernameRegular.test(username)){
-                throw '用户名格式为：6到20位字符'
+                throw this._intl('usernameRole')
             }
             if(!passwordRegular.test(password)){
-                throw '密码格式为：6到20位（至少1个大写字母，1个小写字母，1个数字，1个特殊字符）'
+                throw this._intl('pwdRole')
             }
             if(password !== passwordAgain){
-                throw '两次输入不一致'
+                throw this._intl('inputPwdRole')
             }
         } catch (error) {
             this.setState({
@@ -128,22 +138,19 @@ class ForgetPwd extends Component {
             })
             return false
         }
-        this.setState({
-            tip : ''
-        },()=>this.registered())
+        
+        this.registered()
     }
 
     async registered () {
         const { username,verifyCode, password } = this.state
 
         try {
-            const result = await this.props.post(`/users/password?username=${ username }&password=${ password }&verifyCode=${ verifyCode }`)
+            await this.props.post(`/users/password?username=${ username }&password=${ password }&verifyCode=${ verifyCode }`)
             
-            Toast.success('密码修改成功')
-            console.log(result)
+            Toast.success(this._intl('sucChangePwd'))
         } catch (error) {
-            Toast.error('密码修改失败')
-            console.log(error)
+            Toast.error(error || this._intl('failChangePwd'))
         }
         
     }
