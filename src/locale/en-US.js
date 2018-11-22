@@ -1,9 +1,9 @@
-import { title, firstPrize, secondPrize, thirdPrize } from '../image/index'
+import { titleEn, firstPrizeEn, secondPrizeEn } from '../image/index'
 
 const en_US = {
-    banner: title,
-    firstRank: firstPrize,
-    secondRank: thirdPrize,
+    banner: titleEn,
+    firstRank: firstPrizeEn,
+    secondRank: secondPrizeEn,
     title: 'Joy&treasure', 
     buy: 'Buy',
     invite: 'Invite',
@@ -20,7 +20,7 @@ const en_US = {
     copy:'Copy',
     copySuccess: 'Copy success',
     people: 'people',
-    first:'',
+    first:' ',
     jackpot:'Jackpot',
     yourCoin:'Your coin',
     username:'User name',

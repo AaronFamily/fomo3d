@@ -99,7 +99,7 @@ class Head extends Component {
                             <div className="head-flex-row pull-right">
                                 <img className="g-header-icon head-user-icon" src={ user } alt="user"/>
                                 <div className="head-user-text login-register">
-                                    <div className={isZh ? '' : 'small-padding'} onClick={()=>this.showModel('Login')} className="header-active-login">
+                                    <div className={ `header-active-login ${ isZh ? '' : 'small-padding' }` } onClick={()=>this.showModel('Login')}>
                                         <FormattedMessage id='login'/>
                                     </div>
                                     <div className={isZh ? '' : 'small-padding'} onClick={()=>this.showModel('ModalRegister')}>

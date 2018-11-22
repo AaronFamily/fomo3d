@@ -1,5 +1,5 @@
 import notificationDOM from './notification'
-import './toast.css'
+import './toast.less'
 
 let notification
 const notice = (type, content, duration = 2000, onClose) => {

@@ -9,7 +9,7 @@ import RightBuy from './RightBuy/index'
 import RightRound from './RightRound/index'
 import RightStatistical from './RightStatistical/index'
 
-import { FormattedMessage, injectIntl } from 'react-intl'
+import { injectIntl } from 'react-intl'
 
 import Trophy from './Trophy'
 import { setUserInfo, setTime, resetLoginStatus } from '../../store/action'
@@ -30,62 +30,64 @@ import './index.less'
 class Home extends Component {
 	constructor(props) {
 		super(props)
+		this.num = 0;
 		this.state = {
+			isLoad: false,
 			tabListLeft : [
 				{
-					name: <FormattedMessage id="buy"/>,
-					tabTitle: <FormattedMessage id="buyingCoins"/>,
+					name: 'buy',
+					tabTitle: 'buyingCoins',
 					componentsName: LeftBuy,
 					alert: {
-						title: <FormattedMessage id="buy"/>,
+						title: 'buy',
 						children: [
-							<FormattedMessage id="buyContent"/>
+							'buyContent'
 						]
 					}
 				},
 				{
-					name: <FormattedMessage id="invite"/>,
-					tabTitle: <FormattedMessage id="invite"/>,
+					name: 'invite',
+					tabTitle: 'invite',
 					componentsName: LeftInvite,
 					alert: {
-						title: <FormattedMessage id="invite"/>,
+						title: 'invite',
 						children: [
-							<FormattedMessage id="inviteContent"/>
+							'inviteContent'
 						]
 					}
 				},
 			],
 			tabListRight : [
 				{
-					name: <FormattedMessage id="round"/>,
-					tabTitle: this._intl(['first', 0, 'round']),
+					name: 'round',
+					tabTitle: ['first', 0, 'round'],
 					componentsName: RightRound,
 					alert: {
-						title: <FormattedMessage id="round"/>,
+						title: 'round',
 						children: [
-							<FormattedMessage id="roundContent"/>
+							'roundContent'
 						]
 					}
 				},
 				{
-					name: <FormattedMessage id="recent"/>,
-					tabTitle: <FormattedMessage id="recent"/>,
+					name: 'recent',
+					tabTitle: 'recent',
 					componentsName: RightBuy,
 					alert: {
-						title: <FormattedMessage id="recent"/>,
+						title: 'recent',
 						children: [
-							<FormattedMessage id="RecentlyBuyContent"/>
+							'RecentlyBuyContent'
 						]
 					}
 				},
 				{ 
-					name: <FormattedMessage id="stats"/>,
-					tabTitle: <FormattedMessage id="stats"/>,
+					name: 'stats',
+					tabTitle: 'stats',
 					componentsName: RightStatistical,
 					alert: {
-						title: <FormattedMessage id="stats"/>,
+						title: 'stats',
 						children: [
-							<FormattedMessage id="statisticalContent"/>
+							'statisticalContent'
 						]
 					}
 				}
@@ -94,16 +96,6 @@ class Home extends Component {
 			rank: ['', '', '']
 		}
 	}
-
-	_intl (ids) {
-		return ids.map(id => {
-			if (typeof id === 'number') {
-				return id
-			}
-
-			return this.props.intl.formatMessage({ id })
-		})
-    }
 
 	render() {
 		const { tabListLeft, tabListRight } = this.state
@@ -133,6 +125,7 @@ class Home extends Component {
 		this.getTime()
 		this.getPlatformData()
 		this.getUserInfoData()
+		this.getRound()
 	}
 
 	async getPlatformData () {
@@ -175,20 +168,34 @@ class Home extends Component {
 
 	async getRound () {
 		try {
-			const round = await this.props.get('/sessions/round')
+			// const round = await this.props.get('/sessions/round')
 
-			const newTabListRight = [...this.state.tabListRight]
+			setTimeout (() => {
 
-			newTabListRight[0].tabTitle = this._intl(['first', parseInt(round.lunshu || 0), 'round'])
+				const newTabListRight = [...this.state.tabListRight]
+
+				// console.log(round)
+
+				newTabListRight[0].tabTitle = ['first', 12, 'round']
+
+				this.setState({
+					tabListRight: newTabListRight
+				}, () => {
+					console.log('跟新了')
+				})
+			}, 2000)
+
+			// this.props.setUserInfo({
+			// 	...round
+			// })
+		} catch (error) {
+			newTabListRight[0].tabTitle = ['first', 12, 'round']
 
 			this.setState({
 				tabListRight: newTabListRight
 			})
 
-			this.props.setUserInfo({
-				...round
-			})
-		} catch (error) {}
+		}
 	}
 }
 

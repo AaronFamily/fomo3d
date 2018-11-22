@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
 
 import { doubt } from '../../image/index'
 import './index.less'
@@ -26,7 +27,6 @@ export default class extends Component {
             isMask: false,
             alert: props.list[0].alert,
             leftText: props.list[0].leftText,
-            
         }
 
         this.tabBgColor = this.props.tabBgColor || '#2C4182'
@@ -35,12 +35,28 @@ export default class extends Component {
 
     componentWillReceiveProps (nextProps) {
         this.setState({
-            leftText: nextProps.list[0].leftText
+            tabList: nextProps.list,
+            leftText: nextProps.list[this.state.checkNum].leftText,
+            ThisComponentsName: nextProps.list[this.state.checkNum].componentsName,
+            alert: nextProps.list[this.state.checkNum].alert,
+            tabTitle: nextProps.list[this.state.checkNum].tabTitle,
         })
     }
 
     async componentDidMount () {
         this._eachTabList()
+    }
+
+    _createTitle (item) {
+        if (Array.isArray(item)) {
+            return item.map((names, index) => {
+                if (typeof names === 'number') return <span key={ index }>{ names }</span>
+
+                return <FormattedMessage id={ names } key={ index }/>
+            })
+        }
+
+        return <FormattedMessage id={ item }/>
     }
 
     _eachTabList () {
@@ -50,7 +66,7 @@ export default class extends Component {
                     onClick={() => this.clickTab(index, item.componentsName, item.tabTitle, item.alert, item.leftText)} 
                     className={ this.state.checkNum === index ? 'Accordion_left_li_active' : '' }
                 >
-                    <div className={ this.props.isBox ? 'open-text' : '' }>{ item.name }</div>
+                    <div className={ this.props.isBox ? 'open-text' : '' }>{ <FormattedMessage id={ item.name }/> }</div>
                 </li>
             )
         })
@@ -77,6 +93,8 @@ export default class extends Component {
     render() {
         const { ThisComponentsName, tabTitle, alert, checkNum, leftText } = this.state
 
+        const title = this._createTitle(tabTitle)
+
         return (
             <div className="Accordion">
                 <ul className="Accordion_left" style={ { backgroundColor: this.tabBgColor } }>
@@ -85,7 +103,7 @@ export default class extends Component {
                 <div className="Accordion_right" style={ { backgroundColor: this.cBgColor } }>
                     <img className="accordion-common-yiwen" src={ doubt } onClick={ this.showMask.bind(this) } alt="doubt"/>
                     <div className="accordion-common-left-text">{ checkNum === 0 && leftText }</div>
-                    <div className="accordion-common-title">{ tabTitle }</div>
+                    <div className="accordion-common-title">{ title }</div>
                     <ThisComponentsName user={ this.props.user }></ThisComponentsName>
                 </div>
                 {
@@ -93,15 +111,15 @@ export default class extends Component {
                     <div className="accordion-mask-content d-none d-md-block">
                         <div className="accordion-mask-close" onClick={ this.closeMask.bind(this) }>X</div>
                         <div className="accordion-mask-main">
-                            { alert.title && <h3>{ alert.title }</h3> }
-                            { alert.children.map(item => <p key={item}>{ item }</p>) }
+                            { alert.title && <h3>{ <FormattedMessage id={ alert.title }/> }</h3> }
+                            { alert.children.map((item, index) => <p key={ index }>{ <FormattedMessage id={ item }/> }</p>) }
                         </div>
                     </div>
                     <div className="d-md-none accordion-md-mask-content">
                         <div className="accordion-mask-close" onClick={ this.closeMask.bind(this) }>X</div>
                             <div className="accordion-mask-main">
-                                { alert.title && <h3>{ alert.title }</h3> }
-                                { alert.children.map(item => <p key={item}>{ item }</p>) }
+                                { alert.title && <h3>{ <FormattedMessage id={ alert.title }/> }</h3> }
+                                { alert.children.map((item, index) => <p key={ index }>{ <FormattedMessage id={ item }/> }</p>) }
                             </div>
                         </div>
                     </div>
