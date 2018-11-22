@@ -17,6 +17,6 @@ export default (url, title, Loadings = Loading) => {
             if (title) doc.title = title
             return import(`../screen/${url}`)
         },
-        loading: Loading
+        loading: Loadings
     })
 }
