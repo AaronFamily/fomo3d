@@ -98,7 +98,7 @@ class ForgetPwd extends Component {
         }
         
         try {
-            await this.props.post(`/auth/verify_code?username=${ username }`)
+            await this.props.post(`/auth/verify_code?username=${ username }&language=${ this.props.lang === 'zh' ? 'zh_cn' : 'en_us' }`)
             
             let seconds = 60
             
@@ -146,21 +146,14 @@ class ForgetPwd extends Component {
         const { username,verifyCode, password } = this.state
 
         try {
-            await this.props.post(`/users/password?username=${ username }&password=${ password }&verifyCode=${ verifyCode }`)
+            await this.props.post(`/users/password?username=${ username }&password=${ password }&verifyCode=${ verifyCode }&language=${ this.props.lang === 'zh' ? 'zh_cn' : 'en_us' }`)
             
             Toast.success(this._intl('sucChangePwd'))
+            this.toggle()
         } catch (error) {
             Toast.error(error || this._intl('failChangePwd'))
         }
         
-    }
-
-    loginOptClick (type) {
-        if (type === 'forget') {
-            this.props.goForget && this.props.goForget()
-        } else {
-            this.props.goRegister && this.props.goRegister()
-        }
     }
 
     componentWillReceiveProps (nextProps) {

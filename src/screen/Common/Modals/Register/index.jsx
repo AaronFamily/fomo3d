@@ -121,7 +121,7 @@ class Register extends Component {
         }
         try {
             this.isFireCode = true
-            await this.props.post(`/auth/verify_code?email=${ email }&username=${ username }`)
+            await this.props.post(`/auth/verify_code?email=${ email }&username=${ username }&language=${ this.props.lang === 'zh' ? 'zh_cn' : 'en_us' }`)
             let seconds = 60
             
             this.timeOut = setInterval( () => {
@@ -190,7 +190,7 @@ class Register extends Component {
         this.isRegister = true
 
         try {
-            await this.props.post(`/users?verifyCode=${ verifyCode }&inviterCode=${ inviterCode }`, {
+            await this.props.post(`/users?verifyCode=${ verifyCode }&inviterCode=${ inviterCode }&language=${ this.props.lang === 'zh' ? 'zh_cn' : 'en_us' }`, {
                 address,
                 email,
                 password,
@@ -199,6 +199,7 @@ class Register extends Component {
             Toast.success(this._intl('sucRegister'), 2000, () => {
                 this.props.goLogin && this.props.goLogin()
             })
+            this.toggle()
             this.isRegister = false
         } catch (error) {
             Toast.error(error || this._intl('failRegister'))

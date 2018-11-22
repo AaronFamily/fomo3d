@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Countdown, Accordion } from '../../components/index'
-import { title } from '../../image/index'
 
 import LeftBuy from './LeftBuy/index'
 import LeftInvite from './LeftInvite/index'
@@ -168,34 +167,19 @@ class Home extends Component {
 
 	async getRound () {
 		try {
-			// const round = await this.props.get('/sessions/round')
+			const round = await this.props.get('/sessions/round')
 
-			setTimeout (() => {
+			const newTabListRight = [...this.state.tabListRight]
 
-				const newTabListRight = [...this.state.tabListRight]
-
-				// console.log(round)
-
-				newTabListRight[0].tabTitle = ['first', 12, 'round']
-
-				this.setState({
-					tabListRight: newTabListRight
-				}, () => {
-					console.log('跟新了')
-				})
-			}, 2000)
-
-			// this.props.setUserInfo({
-			// 	...round
-			// })
-		} catch (error) {
-			newTabListRight[0].tabTitle = ['first', 12, 'round']
+			newTabListRight[0].tabTitle = ['first', parseInt(round.lunshu || 0), 'round']
 
 			this.setState({
 				tabListRight: newTabListRight
 			})
-
-		}
+			this.props.setUserInfo({
+				...round
+			})
+		} catch (e) {}
 	}
 }
 

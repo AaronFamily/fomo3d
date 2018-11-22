@@ -1,5 +1,5 @@
 {
-  "name": "Joy&treasure",
+  "name": "Joy-and-treasure",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
@@ -154,5 +154,5 @@
     "less-loader": "^4.1.0",
     "react-hot-loader": "^4.3.12"
   },
-  "proxy": "http://124.126.4.182:8091"
+  "proxy": "http://124.126.4.234:8091"
 }

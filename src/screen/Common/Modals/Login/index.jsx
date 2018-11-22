@@ -109,7 +109,7 @@ class Login extends Component {
         this.isOnClick = true
 
         try {
-            await this.props.post(`/auth/form?username=${ username }&password=${ password }&language=`)
+            await this.props.post(`/auth/form?username=${ username }&password=${ password }&language=${ this.props.lang === 'zh' ? 'zh_cn' : 'en_us' }`)
             Toast.success(this._intl('sucLogin'))
             const round = await this.props.get('/sessions/round')
             const result = await this.props.get('/users')
@@ -119,9 +119,7 @@ class Login extends Component {
 				...round,
 				isLogin: true
             })
-            this.setState({
-                modal: false
-            })
+            this.toggle()
         } catch (error) {
             this.props.resetLoginStatus(false)
             Toast.error(error || this._intl('failLogin'))
