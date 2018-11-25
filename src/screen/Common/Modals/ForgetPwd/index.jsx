@@ -24,7 +24,7 @@ class ForgetPwd extends Component {
         this.state = {
             usernameRegular : /^[a-zA-Z0-9_-]{6,20}$/,
             verifyCodeRegular : /^\d{6}$/,
-            passwordRegular:/^.*(?=.{6,20})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/,
+            passwordRegular: /^[a-zA-Z]\w{6,20}$/,
             tip:'',
             modal: props.modal,
             username:'',
