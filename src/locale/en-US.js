@@ -11,7 +11,7 @@ const en_US = {
     recent: 'Recent',
     stats: 'Stats',
     buyingCoins: 'Buying coins',
-    specification: 'Each coin needs 0.007ETH',
+    specification: 'Each joy coin needs 0.007ETH',
     address:' address',
     myAddress:'ETH address',
     afriend:'Level one friend',

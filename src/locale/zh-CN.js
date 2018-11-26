@@ -11,7 +11,7 @@ const zh_CN = {
     recent: '最近购买',
     stats: '统计',
     buyingCoins: '购买欢乐币',
-    specification: '购买1ETH或更多，有3.1%的机会立即获得0.007ETH空头彩票!',
+    specification: '每枚欢乐币0.007ETH',
     address:'地址',
     myAddress:'我的ETH地址',
     afriend:'一级好友',

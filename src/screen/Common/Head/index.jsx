@@ -147,6 +147,8 @@ class Head extends Component {
 
         lang = lang === 'zh' ? 'en' : 'zh'
 
+        document.title = lang === 'zh' ? '欢乐夺宝记' : 'Joy&treasure'
+
         this.props.toggleLanguage(lang)
     }
 

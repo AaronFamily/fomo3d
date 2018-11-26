@@ -29,7 +29,6 @@ import './index.less'
 class Home extends Component {
 	constructor(props) {
 		super(props)
-		this.num = 0;
 		this.state = {
 			isLoad: false,
 			tabListLeft : [
@@ -59,7 +58,7 @@ class Home extends Component {
 			tabListRight : [
 				{
 					name: 'round',
-					tabTitle: ['first', 0, 'round'],
+					tabTitle: ['first', 1, 'round'],
 					componentsName: RightRound,
 					alert: {
 						title: 'round',
@@ -171,7 +170,7 @@ class Home extends Component {
 
 			const newTabListRight = [...this.state.tabListRight]
 
-			newTabListRight[0].tabTitle = ['first', parseInt(round.lunshu || 0), 'round']
+			newTabListRight[0].tabTitle = ['first', parseInt(round.lunshu || 1), 'round']
 
 			this.setState({
 				tabListRight: newTabListRight

@@ -14,7 +14,7 @@ export default (url, title, Loadings = Loading) => {
 
     return Loadable({
         loader: () => {
-            if (title) doc.title = title
+            // if (title) doc.title = title
             return import(`../screen/${url}`)
         },
         loading: Loadings
